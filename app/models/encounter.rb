@@ -1,4 +1,4 @@
-class Instance < ActiveRecord::Base
+class Encounter < ActiveRecord::Base
     belongs_to :spellbot
     has_many :challenges
 
@@ -11,6 +11,10 @@ class Instance < ActiveRecord::Base
             end
         end
     end
+
+    def successfully_complete_challenge
+        print "You did it!"
+        
 
 
 

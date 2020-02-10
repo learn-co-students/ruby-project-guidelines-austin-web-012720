@@ -1,6 +1,6 @@
 class Challenge < ActiveRecord::Base
-    belongs_to :instance
-    has_many :locations, through: :instance
+    belongs_to :encounter
+    has_many :locations, through: :encounters
 
     def take_damage
         challenge.health -= spell.damage - challenge.health

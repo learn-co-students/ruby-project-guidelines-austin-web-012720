@@ -1,8 +1,8 @@
 class Spellbot < ActiveRecord::Base
     has_many :spells
-    has_many :instances
-    has_many :challenges, through: :instances
-    has_many :locations, through: :instances
+    has_many :encounters
+    has_many :challenges, through: :encounters
+    has_many :locations, through: :encounters
 
     def cast_spell(spell_name, target_name)
         spell = spells.find_by_name(spell_name)
