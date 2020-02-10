@@ -6,7 +6,7 @@ class Challenge < ActiveRecord::Base
         self.health -= damage - self.armor
     end
 
-    def visibile?
+    def visible?
         !self.stealth
     end
 
