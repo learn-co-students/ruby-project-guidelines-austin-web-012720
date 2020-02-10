@@ -14,7 +14,7 @@ class Encounter < ActiveRecord::Base
 
     def successfully_complete_challenge
         print "You did it!"
-        
+    end
 
 
 
