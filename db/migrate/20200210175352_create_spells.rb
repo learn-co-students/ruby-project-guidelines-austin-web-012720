@@ -4,7 +4,7 @@ class CreateSpells < ActiveRecord::Migration[5.0]
       t.integer :damage
       t.string :element
       t.string :target
-      t.integer :spell_bot_id
+      t.integer :spellbot_id
     end
   end
 end
