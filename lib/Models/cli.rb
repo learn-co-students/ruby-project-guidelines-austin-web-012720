@@ -28,6 +28,7 @@ end
 
 def stock_lookup
     puts "Enter a symbol:"
+    
 end 
 
 end 
