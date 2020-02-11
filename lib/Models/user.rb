@@ -56,6 +56,24 @@ class User < ActiveRecord::Base
             "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
             "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
         }
+        
+    end 
+
+    def get_analyst_recommendations(symbol)
+                response = Unirest.get "https://finnhub-realtime-stock-price.p.rapidapi.com/stock/recommendation?symbol=#{symbol}",
+        headers:{
+            "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
+            "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
+        }
+        puts "#{symbol} analyst recommendations for this month:"
+        puts "BUY: #{response.body[0]["buy"]}"
+        puts "HOLD: #{response.body[0]["hold"]}"
+        puts "SELL: #{response.body[0]["sell"]}"
+        puts "STRONG BUY: #{response.body[0]["strongBuy"]}"
+        puts "STRONG SELL: #{response.body[0]["strongSell"]}"
+        # binding.pry
+
+        
     end 
 
    
