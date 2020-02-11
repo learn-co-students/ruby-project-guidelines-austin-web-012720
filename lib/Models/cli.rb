@@ -6,7 +6,7 @@ class CommandLineInterface < User
     end 
 
     def account?
-        answer = PROMPT.ask("Do you have an account? type yes or no")
+        answer = PROMPT.ask("Do you have an account? type yes or no\n")
         
         if answer == "no"
             create_account
@@ -31,6 +31,7 @@ class CommandLineInterface < User
             puts "Wrong username, try again."
             log_in
         else 
+            puts "Welcome #{name}!"
             choose_action
         end
     end 
@@ -56,8 +57,11 @@ class CommandLineInterface < User
             when "2"
                 symbol = PROMPT.ask("Type in a stock symbol")
                 @user.buy_stock(symbol)
+                puts "You bought #{symbol} stock."
             when "3"
+                
                 @user.get_symbols_portfolio
+
             when "4"
                 @user.most_bought_stock
             when "5"
@@ -65,7 +69,9 @@ class CommandLineInterface < User
                 @user.sell_stock(symbol)
             when "6"
                 @user = nil
+                puts "Goodbye"
                 greet
+                account?
             else 
                 puts "Not a valid number, try again."
                 choose_action

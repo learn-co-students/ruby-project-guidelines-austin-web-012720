@@ -3,9 +3,13 @@ class User < ActiveRecord::Base
     has_many :stocks, through: :portfolios
 
     def get_symbols_portfolio
-        self.stocks.map do |x, y|
+        array = self.stocks.map do |x, y|
             # binding.pry
             x.symbol 
+        end 
+        puts "Your portfolio includes these stocks:"
+        array.each do |stock|
+            puts " - #{stock}"
         end 
     end 
 
@@ -40,7 +44,9 @@ class User < ActiveRecord::Base
 
     def buy_stock(symbol)
         hash = look_up(symbol)
-        stock = Stock.find_or_create_by(hash)
+        stock = Stock.find_or_create_by(symbol: hash[:symbol])
+        stock.update(price: hash[:price])
+        stock.update(percent_change: hash[:percent_change])
         Portfolio.create(user_id: self.id, stock_id: stock.id)
     end 
 
@@ -50,13 +56,14 @@ class User < ActiveRecord::Base
     
         other = self.portfolios.find_by(stock_id: id)
         other.destroy
+        puts "You just sold #{symbol} stock."
     end 
 
     def most_bought_stock
         new_stock = Stock.all.max_by do |stock|
             stock.users.count
         end
-
+        puts "This is the most bough stock:"
         puts new_stock.symbol
         puts new_stock.price
         puts new_stock.percent_change
