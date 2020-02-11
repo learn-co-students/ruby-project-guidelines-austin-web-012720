@@ -74,15 +74,18 @@ class User < ActiveRecord::Base
     end 
 
     def sell_stock(symbol)
-        stock = Stock.find_by(symbol: symbol)
-        id = stock.id
-        puts self.stocks
+        response = look_up(symbol)
+        if response != nil 
+            stock = Stock.find_by(symbol: symbol)
+            id = stock.id
+            puts self.stocks
 
-        other = self.portfolios.find_by(stock_id: id)
-        other.destroy
-        puts "\n" * 80
-        puts FONT.write("#{symbol}")  
-        puts "You just sold #{symbol} stock."
+            other = self.portfolios.find_by(stock_id: id)
+            other.destroy
+            puts "\n" * 80
+            puts FONT.write("#{symbol}")  
+            puts "You just sold #{symbol} stock."
+        end 
     end 
 
     def most_bought_stock
