@@ -3,14 +3,24 @@ class Spellbot < ActiveRecord::Base
     has_many :encounters
     has_many :challenges, through: :encounters
     has_many :locations, through: :encounters
+    after_initialize :init
 
+    def init 
+        self.name ||= "Dalek"
+        self.health ||= 10
+        self.current_encounter ||= 1
+    end
+
+    def change_encounter(encounter_num = self.current_encounter + 1)
+        self.current_encounter += 1
+        self.save
+    end
 
     def cast_spell(spell_name)
         spell = Spells.find_by(name: spell_name)
-        target = Challenges.find_by(id: encounter.id)
+        targets = Challenges.find_by(encounter_id: encounter_id)
         # will modify based on attributes later
         target.recieve_spell(spell)
-
     end
 
     def spell_prompt

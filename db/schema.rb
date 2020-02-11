@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20200210175422) do
 
   create_table "spellbots", force: :cascade do |t|
     t.string  "name"
-    t.integer "hp"
+    t.integer "health"
     t.integer "current_encounter"
   end
 
