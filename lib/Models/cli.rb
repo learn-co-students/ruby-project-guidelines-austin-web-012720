@@ -1,5 +1,5 @@
-
-class CommandLineInterface
+require_relative '../Models/user.rb'
+class CommandLineInterface < User
 
     def greet
         puts "Welcome to Your StockPorfolio, the best place to buy stocks!"
@@ -49,27 +49,28 @@ class CommandLineInterface
         
             
     def perform_action
-        case options
-            when @input == "1"
+        case @input
+            when "1"
                 symbol = PROMPT.ask("Type in a stock symbol")
-                @user.stock_lookup(symbol)
-            when @input == "2"
+                @user.look_up(symbol)
+            when "2"
                 symbol = PROMPT.ask("Type in a stock symbol")
                 @user.buy_stock(symbol)
-            when @input == "3"
-                @user.get_symbols_porfolio
-            when @input == "4"
+            when "3"
+                @user.get_symbols_portfolio
+            when "4"
                 @user.most_bought_stock
-            when @input == "5"
+            when "5"
                 symbol = PROMPT.ask("Type in a stock symbol")
                 @user.sell_stock(symbol)
-            when @input == "6"
+            when "6"
                 @user = nil
                 greet
             else 
                 puts "Not a valid number, try again."
                 choose_action
         end 
+        choose_action
     end 
 
         

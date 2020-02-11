@@ -1,12 +1,13 @@
 require_relative '../config/environment'
 
+User.destroy_all
+
 cli = CommandLineInterface.new
 cli.greet
 cli.account?
 
 
-puts "buy a stock"
-symbol = gets.chomp
+
 
 
 

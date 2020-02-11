@@ -30,10 +30,10 @@ class User < ActiveRecord::Base
 
     def look_up_earnings(symbol)
         response = Unirest.get "https://finnhub-realtime-stock-price.p.rapidapi.com/stock/earnings?symbol=#{symbol}",
-  headers:{
-    "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
-    "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
-  }
+        headers:{
+            "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
+            "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
+        }
     end 
 
    
