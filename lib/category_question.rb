@@ -10,6 +10,8 @@ class CategoryQuestion < ActiveRecord::Base
 
         new_question.answer = CategoryQuestion.find_or_create_by(answer: category["answer"])
         new_value = CategoryQuestion.find_or_create_by(value: category["value"])
+
+        #Working on pushing new code to github and merging with master
         
         
       end 
