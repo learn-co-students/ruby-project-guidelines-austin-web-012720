@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ActiveRecord::Base 
     has_many :portfolios
     has_many :stocks, through: :portfolios
 
@@ -15,21 +15,27 @@ class User < ActiveRecord::Base
 
     def look_up(symbol)
         response = Unirest.get "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-detail?region=US&lang=en&symbol=#{symbol}",
-  headers:{
-    "X-RapidAPI-Host" => "apidojo-yahoo-finance-v1.p.rapidapi.com",
-    "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
-  }
-    # binding.pry
-    puts "Name: #{response.body["quoteType"]["shortName"]}"
-    puts "Symbol: #{response.body["quoteType"]["symbol"]}"
-    puts "Last day's close: $#{response.body["price"]["regularMarketPreviousClose"]["raw"]}"
-    puts "Percent Change: #{response.body["price"]["regularMarketChange"]["raw"]}%"
+        headers:{
+            "X-RapidAPI-Host" => "apidojo-yahoo-finance-v1.p.rapidapi.com",
+            "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
+        }
+    
+        if response.body != ""
+            puts "\n" * 35
+            puts "Name: #{response.body["quoteType"]["shortName"]}"
+            puts "Symbol: #{response.body["quoteType"]["symbol"]}"
+            puts "Last day's close: $#{response.body["price"]["regularMarketPreviousClose"]["raw"]}"
+            puts "Percent Change: #{response.body["price"]["regularMarketChange"]["raw"]}%"
 
-    stock_hash = {
-        symbol: response.body["quoteType"]["symbol"],
-        price: response.body["price"]["regularMarketPreviousClose"]["raw"],
-        percent_change: response.body["price"]["regularMarketChange"]["raw"]
-    }
+            stock_hash = {
+                symbol: response.body["quoteType"]["symbol"],
+                price: response.body["price"]["regularMarketPreviousClose"]["raw"],
+                percent_change: response.body["price"]["regularMarketChange"]["raw"]
+            }
+        else 
+            puts "Invalid stock symbol"
+            
+        end 
     end 
 
     def look_up_earnings(symbol)
@@ -44,11 +50,15 @@ class User < ActiveRecord::Base
 
     def buy_stock(symbol)
         hash = look_up(symbol)
-        stock = Stock.find_or_create_by(symbol: hash[:symbol])
-        stock.update(price: hash[:price])
-        stock.update(percent_change: hash[:percent_change])
-        Portfolio.create(user_id: self.id, stock_id: stock.id)
-        puts "You bought #{symbol} stock."
+        if hash != nil
+            stock = Stock.find_or_create_by(symbol: hash[:symbol])
+            stock.update(price: hash[:price])
+            stock.update(percent_change: hash[:percent_change])
+            Portfolio.create(user_id: self.id, stock_id: stock.id)
+            puts "\n" * 35 
+            puts FONT.write("#{symbol}") 
+            puts "You bought #{symbol} stock."
+        end
     end 
 
     def sell_stock(symbol)
@@ -57,6 +67,8 @@ class User < ActiveRecord::Base
     
         other = self.portfolios.find_by(stock_id: id)
         other.destroy
+        puts "\n" * 35
+        puts FONT.write("#{symbol}")  
         puts "You just sold #{symbol} stock."
     end 
 
