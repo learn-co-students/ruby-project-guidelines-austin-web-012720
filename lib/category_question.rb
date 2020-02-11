@@ -4,21 +4,23 @@ class CategoryQuestion < ActiveRecord::Base
     def self.get_category_questions
       response = RestClient.get 'http://jservice.io/api/random?count=8'
       parsed_response = JSON.parse(response.body)
+
       parsed_response.each do |question|
-        
-        new_question = CategoryQuestion.find_or_create_by(question: category["question"])
 
-        new_question.answer = CategoryQuestion.find_or_create_by(answer: category["answer"])
-        new_value = CategoryQuestion.find_or_create_by(value: category["value"])
+        new_category = Category.find_or_create_by(api_id: question["category"]["id"])
+        new_category.category_name = question["category"]['title']
+        new_category.save
 
-        #Working on pushing new code to github and merging with master
-        
-        
+        new_question = CategoryQuestion.find_or_create_by(question: question["question"])
+        new_question.answer = question["answer"]
+        new_question.value = question["value"]
+        #Some of the values are nil so we need to assign an optional value
+        new_question.category_id = question["category_id"]
+        new_question.save
+        new_question
+        binding.pry
       end 
     end
-    #to access question category["question"]
-    #to access answer category["answer"]
-    #to access value category["value"]
-    #to access api_id question["category"]["id"]
+  
 
 end
