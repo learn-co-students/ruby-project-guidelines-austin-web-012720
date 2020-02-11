@@ -4,6 +4,7 @@ class Encounter < ActiveRecord::Base
 
 
     def enter_location
+        create_challenge_instance
         print "You have entered #{location.name}. #{location.description}"
         challenges.each do |challenge|
             if !challenge.stealth
