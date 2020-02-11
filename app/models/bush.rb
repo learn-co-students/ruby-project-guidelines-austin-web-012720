@@ -6,7 +6,7 @@ class Bush < Challenge
         # The ||= is there for if we want to set other values when we're creating them
         self.name ||= "A Bush"
         self.description ||= "Just...a bush. Why do you need to kill a bush? You monster."
-        self.element ||= "none"
+        self.element ||= nil
         self.health ||= 3
         self.armor ||= 0
         self.stealth ||= 0
