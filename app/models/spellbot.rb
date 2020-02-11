@@ -6,7 +6,7 @@ class Spellbot < ActiveRecord::Base
 
 
     def cast_spell(spell_name)
-        spell = Spells.find_by_name(spell_name)
+        spell = Spells.find_by(name: spell_name)
         target = Challenges.find_by(id: encounter.id)
         # will modify based on attributes later
         target.recieve_spell(spell)
