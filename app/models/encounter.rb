@@ -12,7 +12,16 @@ class Encounter < ActiveRecord::Base
         end
     end
 
+    def create_challenge_instance
+        encounter_spawn = challenge
+    end
+
+    def destroy_challenge_instance
+        encounter_spawn = nil
+    end
+
     def successfully_complete_challenge
+        destroy_challenge_instance
         print "You did it!"
     end
 
