@@ -3,13 +3,24 @@ class User < ActiveRecord::Base
     has_many :stocks, through: :portfolios
 
     def get_symbols_portfolio
-        array = self.stocks.map do |x, y|
-            # binding.pry
-            x.symbol 
+        user_id = self.id 
+        array = Portfolio.where(user_id: user_id)
+        
+        stock_ids = array.map do |relationship|
+            relationship.stock_id
         end 
-        puts "Your portfolio includes these stocks:"
-        array.each do |stock|
-            puts " - #{stock}"
+        output = stock_ids.map do |id|
+            Stock.where("id = ?", id)
+        end
+        
+        new_array = output.map do |x, y|
+             x.symbol
+        end 
+        if new_array == []
+            puts "Porfolio is empty."
+        else 
+            puts "Your porfolio has these stocks:"
+            puts new_array
         end 
     end 
 
@@ -64,7 +75,8 @@ class User < ActiveRecord::Base
     def sell_stock(symbol)
         stock = Stock.find_by(symbol: symbol)
         id = stock.id
-    
+        puts self.stocks
+
         other = self.portfolios.find_by(stock_id: id)
         other.destroy
         puts "\n" * 35

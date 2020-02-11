@@ -71,13 +71,11 @@ class CommandLineInterface < User
             when "1"
                 symbol = PROMPT.ask("Type in a stock symbol\n")
                 response = @user.look_up(symbol.upcase)
-                # binding.pry
+               
                 while response == nil do 
                     symbol = PROMPT.ask("Type in a stock symbol\n")
                     response = @user.look_up(symbol.upcase)
-                    # binding.pry
                 end 
-
             when "2"
                 symbol = PROMPT.ask("Type in a stock symbol\n")
                 @user.buy_stock(symbol.upcase)
