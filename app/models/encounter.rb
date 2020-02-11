@@ -14,7 +14,7 @@ class Encounter < ActiveRecord::Base
     end
 
     def create_challenge_instance
-        encounter_spawn = challenge
+        encounter_spawn = Challenge.find(challenge_id == self.challenge_id)
     end
 
     def destroy_challenge_instance
@@ -22,8 +22,8 @@ class Encounter < ActiveRecord::Base
     end
 
     def successfully_complete_challenge
+        PROMPT.say("You did it! You have successfully defeated #{challenge.name}.", color: :green)
         destroy_challenge_instance
-        print "You did it!"
     end
 
 
