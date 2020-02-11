@@ -1,4 +1,4 @@
-bush = Challenge.create(name: "A Bush", description:"Just...a bush. Why do you need to kill a bush? You monster.", health: 3, stealth: 0, armor: 0)
+Bush.create
 fieldod = Location.create(name: "Field of Despair", description: "Behold the Field of Despair! Marvel at the terrifying and dangerous challenges you must overcome to progress.")
 #encounter 1 ^^^
 
