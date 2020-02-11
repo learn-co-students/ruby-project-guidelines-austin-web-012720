@@ -7,10 +7,10 @@ class CategoryQuestion < ActiveRecord::Base
       parsed_response.each do |question|
         
         new_question = CategoryQuestion.find_or_create_by(question: category["question"])
-        
+
         new_question.answer = CategoryQuestion.find_or_create_by(answer: category["answer"])
         new_value = CategoryQuestion.find_or_create_by(value: category["value"])
-        new_api
+        
         
       end 
     end
