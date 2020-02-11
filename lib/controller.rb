@@ -5,7 +5,7 @@ class Jeopardy
     
     def intro
         @think_song = Music.new('Jeopardy-theme-song.mp3')
-        @think_song.play
+        # @think_song.play
         Views.banner_jeopardy
         Jeopardy.main
     end
@@ -30,7 +30,9 @@ class Jeopardy
             self.find_user
             self.enter_password
         else "Exit"
-            self.main                   
+#NEED TO REDIRECT TO SOMEWHERE WHEN EXIT SELECTED
+            # intro  
+            binding.pry                 
         end       
     end
 
@@ -60,9 +62,9 @@ class Jeopardy
     end
 
     def self.select_category
-    
+        #category returns a list of categories to select from
+        category = CategoryQuestion.get_category_questions
     end
-
 
 
 end
