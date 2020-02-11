@@ -50,15 +50,30 @@ def end_screen
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^^^", letter_spacing: 2))
 end
 
-def reset_database
-    Challenge.delete_all
-    Encounter.delete_all
-    Location.delete_all
-    Spell.delete_all
-    Spellbot.delete_all
+def spell_prompt
+    spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
+    PROMPT.say("You cast #{spell}!", color: :blue)
+    cast_spell(spell)
 end
 
-def combat
+def cast_spell(spell_name)
+    spell = Spell.find_by(name: spell_name)
+    target = Challenge.find_by(encounter_id: current_encounter)
+    # will modify based on attributes later
+    target.recieve_spell(spell)
+end
+
+def combat(id)
+    encounter_challenge = Challenge.find_by(id: id)
+    location = Location.find_by(id: id)
+    puts ""
+    puts ""
+    puts ""
+    if encounter_challenge.health > 0 
+        PROMPT.say("choose your spell wisely", color: :green)
+        spell_prompt
+    end
+
 end
 
 def enter_location(id)
@@ -69,8 +84,8 @@ def enter_location(id)
     #encounter_challenges.each do |challenge|
         if !encounter_challenge.stealth
             PROMPT.say("You spotted one!", color: :red)
-            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :red)
-            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :red)
+            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
         end
     #end
@@ -78,12 +93,16 @@ end
 
 def initialize_and_complete_combat(player)
     enter_location(player.current_encounter)
-    #combat
+    combat(player.current_encounter)
 end
 
-
-
-
+def reset_database
+    Challenge.delete_all
+    Encounter.delete_all
+    Location.delete_all
+    Spell.delete_all
+    Spellbot.delete_all
+end
 
 def game_startup
     #title_logo
