@@ -50,6 +50,10 @@ def end_screen
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^^^", letter_spacing: 2))
 end
 
+def reset_database
+    rake db:reset
+end
+
 def game_startup
     title_logo
     game_intro
