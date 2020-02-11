@@ -1,8 +1,9 @@
+
 require_relative '../Models/user.rb'
 class CommandLineInterface < User
 
     def greet
-        puts "Welcome to Your StockPorfolio, the best place to buy stocks!"
+        puts "Welcome to Your StockPorfolio, the best place to buy stocks!\n"
     end 
 
     def account?
@@ -16,35 +17,47 @@ class CommandLineInterface < User
     end 
 
     def create_account
-        name = PROMPT.ask("Enter your name:")
-        password = PROMPT.ask("Enter a password:")
+        name = PROMPT.ask("Enter your name:\n")
+        password = ask("Enter a new password:  \n") { |q| q.echo = "*" }
 
         User.find_or_create_by(name: name, password: password)
         log_in
     end 
 
     def log_in
-        name = PROMPT.ask("Type in your username to log in")
-        
+        name = PROMPT.ask("Type in your username to log in\n")
         @user = User.find_by(name: name)
+
         if !@user
             puts "Wrong username, try again."
             log_in
         else 
-            puts "Welcome #{name}!"
-            choose_action
-        end
+            get_password
+        end 
+    end 
+
+    def get_password
+        input_password = ask("Type in your password:  \n") { |q| q.echo = "*" }
+            if @user.password == input_password
+                puts "Welcome #{@user.name}!"
+                choose_action
+            else 
+                puts "Wrong password, try again!"
+                get_password
+            end 
     end 
 
     def choose_action
         puts "
+        MAIN MENU:
+
             1) Look Up a Stock
             2) Buy Stock
             3) View your Porfolio
             4) View Most popular stock
             5) Sell a stock
-            6) Log out"
-            @input = PROMPT.ask("Please choose a number")
+            6) Log out\n"
+            @input = PROMPT.ask("Please choose a number\n")
             perform_action
     end 
         
@@ -52,20 +65,17 @@ class CommandLineInterface < User
     def perform_action
         case @input
             when "1"
-                symbol = PROMPT.ask("Type in a stock symbol")
+                symbol = PROMPT.ask("Type in a stock symbol\n")
                 @user.look_up(symbol)
             when "2"
-                symbol = PROMPT.ask("Type in a stock symbol")
+                symbol = PROMPT.ask("Type in a stock symbol\n")
                 @user.buy_stock(symbol)
-                puts "You bought #{symbol} stock."
             when "3"
-                
                 @user.get_symbols_portfolio
-
             when "4"
                 @user.most_bought_stock
             when "5"
-                symbol = PROMPT.ask("Type in a stock symbol")
+                symbol = PROMPT.ask("Type in a stock symbol\n")
                 @user.sell_stock(symbol)
             when "6"
                 @user = nil

@@ -48,6 +48,7 @@ class User < ActiveRecord::Base
         stock.update(price: hash[:price])
         stock.update(percent_change: hash[:percent_change])
         Portfolio.create(user_id: self.id, stock_id: stock.id)
+        puts "You bought #{symbol} stock."
     end 
 
     def sell_stock(symbol)

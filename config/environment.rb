@@ -1,5 +1,7 @@
 require 'bundler'
 require 'unirest'
+require 'io/console'
+require 'highline/import'
 
 Bundler.require
 

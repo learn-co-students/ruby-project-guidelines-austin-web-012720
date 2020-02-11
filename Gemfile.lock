@@ -17,7 +17,9 @@ GEM
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
     equatable (0.6.1)
+    highline (2.0.3)
     i18n (0.8.1)
+    io-console (0.4.7)
     json (1.8.6)
     method_source (0.8.2)
     mime-types (1.25.1)
@@ -72,6 +74,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  highline (~> 2.0, >= 2.0.3)
+  io-console (~> 0.4.2)
   pry
   require_all
   sinatra-activerecord
