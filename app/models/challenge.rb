@@ -31,7 +31,7 @@ class Challenge < ActiveRecord::Base
     end
 
     def receive_spell(spell)
-        if self.visibile?
+        if self.visible?
             check_and_engage_element(spell)
             self.take_damage(spell.damage)
         else

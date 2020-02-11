@@ -1,5 +1,4 @@
 def title_logo
-
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
@@ -53,32 +52,33 @@ end
 def spell_prompt
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
     PROMPT.say("You cast #{spell}!", color: :blue)
-    cast_spell(spell)
+    spell
 end
 
-def cast_spell(spell_name)
+def cast_spell(spell_name, challenge_id)
     spell = Spell.find_by(name: spell_name)
-    target = Challenge.find_by(encounter_id: current_encounter)
+    target = Challenge.find_by(id: challenge_id)
     # will modify based on attributes later
-    target.recieve_spell(spell)
+    target.receive_spell(spell)
 end
 
-def combat(id)
-    encounter_challenge = Challenge.find_by(id: id)
-    location = Location.find_by(id: id)
+def combat(challenge_id)
+    encounter_challenge = Challenge.find_by(id: challenge_id)
+    location = Location.find_by(id: challenge_id)
     puts ""
     puts ""
     puts ""
     if encounter_challenge.health > 0 
         PROMPT.say("choose your spell wisely", color: :green)
-        spell_prompt
+        spell_name = spell_prompt
+        cast_spell(spell_name, challenge_id)
     end
 
 end
 
-def enter_location(id)
-    encounter_challenge = Challenge.find_by(id: id)
-    location = Location.find_by(id: id)
+def enter_location(challenge_id)
+    encounter_challenge = Challenge.find_by(id: challenge_id)
+    location = Location.find_by(id: challenge_id)
     PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
     #encounter_challenges.each do |challenge|
