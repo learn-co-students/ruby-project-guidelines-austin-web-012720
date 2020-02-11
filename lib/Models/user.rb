@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
         if new_array == []
             puts "Porfolio is empty."
         else 
+            puts "\n" * 80
             puts "Your porfolio has these stocks:"
             puts new_array
         end 
@@ -32,7 +33,7 @@ class User < ActiveRecord::Base
         }
     
         if response.body != ""
-            puts "\n" * 35
+            puts "\n" * 80
             puts "Name: #{response.body["quoteType"]["shortName"]}"
             puts "Symbol: #{response.body["quoteType"]["symbol"]}"
             puts "Last day's close: $#{response.body["price"]["regularMarketPreviousClose"]["raw"]}"
@@ -66,7 +67,7 @@ class User < ActiveRecord::Base
             stock.update(price: hash[:price])
             stock.update(percent_change: hash[:percent_change])
             Portfolio.create(user_id: self.id, stock_id: stock.id)
-            puts "\n" * 35 
+            puts "\n" * 80
             puts FONT.write("#{symbol}") 
             puts "You bought #{symbol} stock."
         end
@@ -79,7 +80,7 @@ class User < ActiveRecord::Base
 
         other = self.portfolios.find_by(stock_id: id)
         other.destroy
-        puts "\n" * 35
+        puts "\n" * 80
         puts FONT.write("#{symbol}")  
         puts "You just sold #{symbol} stock."
     end 
@@ -88,7 +89,8 @@ class User < ActiveRecord::Base
         new_stock = Stock.all.max_by do |stock|
             stock.users.count
         end
-        puts "This is the most bough stock:"
+        puts "\n" * 80
+        puts "This is the most bought stock:"
         puts new_stock.symbol
         puts new_stock.price
         puts new_stock.percent_change
