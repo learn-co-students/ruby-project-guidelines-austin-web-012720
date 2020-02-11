@@ -42,6 +42,5 @@ class Challenge < ActiveRecord::Base
         else
             print "There is nothing to target!"
         end
-        
     end
 end
