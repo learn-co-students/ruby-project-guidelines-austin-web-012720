@@ -56,7 +56,6 @@ def reset_database
     Location.delete_all
     Spell.delete_all
     Spellbot.delete_all
-    rake db:seed
 end
 
 def combat
@@ -89,6 +88,7 @@ end
 def game_startup
     #title_logo
     #game_intro
+    #reset_database
     name = PROMPT.ask("What is your name?")
     player = Spellbot.create(name: name, current_encounter: 1)
     initialize_and_complete_combat(player)
