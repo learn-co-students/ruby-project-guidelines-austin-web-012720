@@ -3,13 +3,25 @@ class User < ActiveRecord::Base
     has_many :stocks, through: :portfolios
 
     def get_symbols_portfolio
-        array = self.stocks.map do |x, y|
-            # binding.pry
-            x.symbol 
+        user_id = self.id 
+        array = Portfolio.where(user_id: user_id)
+        
+        stock_ids = array.map do |relationship|
+            relationship.stock_id
         end 
-        puts "Your portfolio includes these stocks:"
-        array.each do |stock|
-            puts " - #{stock}"
+        output = stock_ids.map do |id|
+            Stock.where("id = ?", id)
+        end
+        
+        new_array = output.map do |x, y|
+             x.symbol
+        end 
+        if new_array == []
+            puts "Porfolio is empty."
+        else 
+            puts "\n" * 80
+            puts "Your porfolio has these stocks:"
+            puts new_array
         end 
     end 
 
@@ -21,7 +33,7 @@ class User < ActiveRecord::Base
         }
     
         if response.body != ""
-            puts "\n" * 35
+            puts "\n" * 80
             puts "Name: #{response.body["quoteType"]["shortName"]}"
             puts "Symbol: #{response.body["quoteType"]["symbol"]}"
             puts "Last day's close: $#{response.body["price"]["regularMarketPreviousClose"]["raw"]}"
@@ -44,6 +56,24 @@ class User < ActiveRecord::Base
             "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
             "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
         }
+        
+    end 
+
+    def get_analyst_recommendations(symbol)
+                response = Unirest.get "https://finnhub-realtime-stock-price.p.rapidapi.com/stock/recommendation?symbol=#{symbol}",
+        headers:{
+            "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
+            "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
+        }
+        puts "#{symbol} analyst recommendations for this month:"
+        puts "BUY: #{response.body[0]["buy"]}"
+        puts "HOLD: #{response.body[0]["hold"]}"
+        puts "SELL: #{response.body[0]["sell"]}"
+        puts "STRONG BUY: #{response.body[0]["strongBuy"]}"
+        puts "STRONG SELL: #{response.body[0]["strongSell"]}"
+        # binding.pry
+
+        
     end 
 
    
@@ -55,28 +85,33 @@ class User < ActiveRecord::Base
             stock.update(price: hash[:price])
             stock.update(percent_change: hash[:percent_change])
             Portfolio.create(user_id: self.id, stock_id: stock.id)
-            puts "\n" * 35 
+            puts "\n" * 80
             puts FONT.write("#{symbol}") 
             puts "You bought #{symbol} stock."
         end
     end 
 
     def sell_stock(symbol)
-        stock = Stock.find_by(symbol: symbol)
-        id = stock.id
-    
-        other = self.portfolios.find_by(stock_id: id)
-        other.destroy
-        puts "\n" * 35
-        puts FONT.write("#{symbol}")  
-        puts "You just sold #{symbol} stock."
+        response = look_up(symbol)
+        if response != nil 
+            stock = Stock.find_by(symbol: symbol)
+            id = stock.id
+            puts self.stocks
+
+            other = self.portfolios.find_by(stock_id: id)
+            other.destroy
+            puts "\n" * 80
+            puts FONT.write("#{symbol}")  
+            puts "You just sold #{symbol} stock."
+        end 
     end 
 
     def most_bought_stock
         new_stock = Stock.all.max_by do |stock|
             stock.users.count
         end
-        puts "This is the most bough stock:"
+        puts "\n" * 80
+        puts "This is the most bought stock:"
         puts new_stock.symbol
         puts new_stock.price
         puts new_stock.percent_change

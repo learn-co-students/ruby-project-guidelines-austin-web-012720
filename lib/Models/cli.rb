@@ -42,7 +42,7 @@ class CommandLineInterface < User
     def get_password
         input_password = ask("Type in your password:  \n") { |q| q.echo = "*" }
             if @user.password == input_password
-                puts "\n" * 35
+                puts "\n" * 80
                 puts "Welcome #{@user.name}!"
                 choose_action
             else 
@@ -52,6 +52,7 @@ class CommandLineInterface < User
     end 
 
     def choose_action
+        puts puts "\n" * 80
         puts "
         MAIN MENU:
 
@@ -71,13 +72,11 @@ class CommandLineInterface < User
             when "1"
                 symbol = PROMPT.ask("Type in a stock symbol\n")
                 response = @user.look_up(symbol.upcase)
-                # binding.pry
+               
                 while response == nil do 
                     symbol = PROMPT.ask("Type in a stock symbol\n")
                     response = @user.look_up(symbol.upcase)
-                    # binding.pry
                 end 
-
             when "2"
                 symbol = PROMPT.ask("Type in a stock symbol\n")
                 @user.buy_stock(symbol.upcase)
@@ -90,12 +89,16 @@ class CommandLineInterface < User
                 @user.sell_stock(symbol.upcase)
             when "6"
                 @user = nil
-                puts "Goodbye"
+                puts "\n" * 80
+                puts "YOU HAVE BEEN LOGGED OUT!"
+                puts "\n" * 5
                 greet
+                puts "\n" * 5
                 account?
             else 
-                puts "Not a valid number, try again."
+                
                 choose_action
+                puts "Not a valid number, try again."
         end 
         back_to_menu
     end 
