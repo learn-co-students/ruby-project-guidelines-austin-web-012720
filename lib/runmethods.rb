@@ -59,10 +59,3 @@ def game_startup
     game_intro
     end_screen
 end
-
-
-
-def spell_prompt
-    spell = PROMPT.select("Pick which spell to cast", %w(ManaBolt Inspect FrostBolt), active_color: :bright_red, per_page: 6)
-    PROMPT.say("You cast #{spell}!", color: :blue)
-end
