@@ -10,4 +10,5 @@ gem "rest-client"
 gem "faker"
 gem "tty-prompt"
 gem "colorize"
+gem "ruby2d"
 

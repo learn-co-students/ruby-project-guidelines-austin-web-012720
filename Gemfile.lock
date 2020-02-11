@@ -50,6 +50,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    ruby2d (0.9.3)
     sinatra (2.0.7)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -90,6 +91,7 @@ DEPENDENCIES
   pry
   require_all
   rest-client
+  ruby2d
   sinatra-activerecord
   sqlite3
   tty-prompt
