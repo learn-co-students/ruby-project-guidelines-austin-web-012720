@@ -4,6 +4,7 @@ cli = CommandLineInterface.new
 cli.greet
 cli.account?
 
+
 puts "buy a stock"
 symbol = gets.chomp
 
