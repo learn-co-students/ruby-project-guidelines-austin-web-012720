@@ -51,11 +51,47 @@ def end_screen
 end
 
 def reset_database
-    rake db:reset
+    Challenge.delete_all
+    Encounter.delete_all
+    Location.delete_all
+    Spell.delete_all
+    Spellbot.delete_all
+    rake db:seed
 end
 
-def game_startup
-    title_logo
-    game_intro
-    end_screen
+def combat
 end
+
+def enter_location(id)
+    encounter_challenge = Challenge.find_by(id: id)
+    location = Location.find_by(id: id)
+    PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
+    PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
+    #encounter_challenges.each do |challenge|
+        if !encounter_challenge.stealth
+            PROMPT.say("You spotted one!", color: :red)
+            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :red)
+            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :red)
+            PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
+        end
+    #end
+end
+
+def initialize_and_complete_combat(player)
+    enter_location(player.current_encounter)
+    #combat
+end
+
+
+
+
+
+def game_startup
+    #title_logo
+    #game_intro
+    name = PROMPT.ask("What is your name?")
+    player = Spellbot.create(name: name, current_encounter: 1)
+    initialize_and_complete_combat(player)
+    #end_screen
+end
+
