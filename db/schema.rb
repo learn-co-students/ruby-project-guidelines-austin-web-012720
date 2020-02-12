@@ -23,7 +23,6 @@ ActiveRecord::Schema.define(version: 20200210175422) do
   end
 
   create_table "encounters", force: :cascade do |t|
-    t.boolean "complete"
     t.integer "challenge_id"
     t.integer "location_id"
   end
