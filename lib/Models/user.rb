@@ -134,27 +134,37 @@ class User < ActiveRecord::Base
             stock = Stock.find_or_create_by(symbol: hash[:symbol])
             stock.update(price: hash[:price])
             stock.update(percent_change: hash[:percent_change])
-            user_stock = Portfolio.find_or_create_by(user_id: self.id, stock_id: stock.id, shares: shares)
-            user_stock.update(shares: shares)
+            user_stock = Portfolio.find_or_create_by(user_id: self.id, stock_id: stock.id)
+            if user_stock.shares == nil
+                user_stock.update(shares: 0)
+                stock_shares = user_stock.shares
+                user_stock.update(shares: stock_shares + shares.to_f)
+
+            else 
+                stock_shares = user_stock.shares
+                user_stock.update(shares: stock_shares + shares.to_f)
+            end 
             puts "\n" * 80
             puts FONT.write("#{symbol}") 
             puts "You bought #{shares} shares of #{symbol} stock."
         end
     end 
 
-    def sell_stock(symbol)
+    def sell_stock(symbol, shares)
 
         if !get_symbols_portfolio.any? do |stock|
             stock == symbol.upcase
             end
+            puts "\n" * 40
             puts "You don't own #{symbol} stock."
         else 
         
             stock = Stock.find_by(symbol: symbol)
             id = stock.id
             
-            other = self.portfolios.find_by(stock_id: id)
-            other.destroy
+            user_stock = self.portfolios.find_by(stock_id: id)
+            stock_shares = user_stock.shares
+            user_stock.update(shares: stock_shares - shares.to_f)
             puts "\n" * 80
             puts FONT.write("#{symbol}")  
             puts "You just sold #{symbol} stock."
