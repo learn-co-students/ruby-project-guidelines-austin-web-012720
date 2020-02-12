@@ -1,9 +1,12 @@
 require 'ruby2d'
+# require 'japi'
 
 
 class Jeopardy
+
+    @@score = 0
     
-    def intro
+        def intro
         @think_song = Music.new('Jeopardy-theme-song.mp3')
         @think_song.play
         Views.banner_jeopardy
@@ -23,14 +26,16 @@ class Jeopardy
     end
 
     def self.login
-        login_or_exit = PROMPT.select("", %w(Login Exit))
+        login_or_exit = PROMPT.select("", %w(Login Exit Delete_unusable_categories))
         case login_or_exit
         when "Login"
             self.find_user
             self.enter_password
-        else "Exit"
+        when "Exit"
           puts "Thank you for playing."
-          exit                  
+          exit     
+        else "Delete_unusable_categories"
+            Question.check_category_length             
         end       
     end
 
@@ -62,28 +67,160 @@ class Jeopardy
     def self.select_category
         puts "\n" * 35
         Views.select_category_banner
-        new_category_questions = Question.get_category_questions
         random_selection = Question.all.sample(6)
         category_strings = random_selection.map{|cat| cat.category}
-        
         selection = PROMPT.select("Select a category", category_strings)
-
+        questions = Question.all.select {|question| question.category == selection}
         case selection
         when category_strings[0]
-            puts "#{category_strings[0]}"
+            # binding.pry
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
+            # binding.pry
         when category_strings[1]
-            puts "#{category_strings[1]}"
+
+
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end        
         when category_strings[2]
-            puts "#{category_strings[2]}"
+
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         when category_strings[3]
-            puts "#{category_strings[3]}"
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         when category_strings[4]
-            puts "#{category_strings[4]}"
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         else category_strings[5]
-            puts "#{category_strings[5]}"
+
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         end
-        binding.pry
+        # binding.pry
     end
+
+
 
 
 end
