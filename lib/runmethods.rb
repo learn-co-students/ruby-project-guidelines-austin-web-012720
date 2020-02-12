@@ -1,4 +1,3 @@
-game_status = "RUNNING"
 def title_logo
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
@@ -48,22 +47,28 @@ def end_screen
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^^^", letter_spacing: 2))
 end
 
+def end_screen_failure
+    puts PASTEL.bright_red(FONT.write("    GAME", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("    OVER", letter_spacing: 2))
+end
+
 
 def spell_prompt
     puts "\n" * 3
     PROMPT.say("choose your spell wisely", color: :green)
     puts "\n"
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
-    PROMPT.say("You cast #{spell}!", color: :blue)
+    
     spell
 end
 
-def target_prompt(targets)
-    puts "\n" * 3
-    PROMPT.say("choose your spell wisely", color: :green)
-    spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
-    spell
-end
+# TODO: Not used until we have multiple enemies
+# def target_prompt(targets)
+#     puts "\n" * 3
+#     PROMPT.say("choose your spell wisely", color: :green)
+#     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
+#     spell
+# end
 
 def cast_spell(player, spell, target)
     # will modify based on attributes later
@@ -89,7 +94,7 @@ def combat(player, challenge)
         player_turn(player, challenge)
     #   TODO: multi targets later 
     #   if not challenges.any?{ |challenge| challenge.health > 0}
-        if challenge.health < 0
+        if challenge.health <= 0
             combat_victory(player)
             break;
         end
@@ -118,16 +123,14 @@ def player_turn(player, target)
 end
 
 def challenge_turn(player, challenge)
-    puts "\n"
-    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health}hp left.", color: :bright_green) 
     player.take_damage(challenge.strength)
+    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :bright_green)
     player
 end
 
 def combat_victory(player)
     # TODO: Make this pretty
-    puts "\n"
-    PROMPT.say("Your enemies lie broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
+    PROMPT.say("Your enemy lies broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
 end
 
@@ -135,7 +138,7 @@ def combat_failure(player)
     # TODO: Make this pretty
     puts "\n"
     PROMPT.say("You lie broken and defeated. Your quest to become a mage is done.", color: :bright_magenta)
-    game_status = "FAILED"
+    "FAILED"
 end
 
 def enter_location(player)
@@ -175,17 +178,24 @@ def game_startup
     name = PROMPT.ask("What is your name?")
     player = Spellbot.new(name: name, current_encounter: 1)
     # TODO: change the number of challenges
-    while not Encounter.last.complete
+    while player.current_encounter <= Encounter.last.id
         enter_location(player)
         encounter = Encounter.find_by(id: player.current_encounter)
         challenge = Challenge.find_by(id: player.current_encounter)
         # TODO: Will make multiple enemies available later. One enemy per challenge currently
         # challenges = Challenge.all.collect{ |challenge| Challenge.new(challenge) }
         combat(player, challenge)
-        encounter.complete = true
-        encounter.save # TODO: may need to move this
+        if player.health <= 0
+            break;
+        end
         player.current_encounter += 1
     end
-    end_screen
+
+    player.save
+    if player.health <= 0
+        end_screen_failure
+    else
+        end_screen
+    end
 end
 
