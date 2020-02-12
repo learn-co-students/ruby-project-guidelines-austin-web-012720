@@ -47,7 +47,9 @@ class Challenge < ActiveRecord::Base
             self.take_damage(spell.damage)
             spell.damage
         else
-            "There is nothing to target!"
+            puts ""
+            PROMPT.say("There is nothing to target!", color: :bright_green)
+            puts ""
         end
     end
 end

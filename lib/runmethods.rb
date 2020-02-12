@@ -7,40 +7,38 @@ def title_logo
 end
 
 def game_intro
+    puts "\n" * 2
     PROMPT.say("Welcome to ", color: :green) 
     PROMPT.say("RUBY WIZARD ", color: :bright_red)
     PROMPT.say("!", color: :green) 
+    puts "\n"
     PROMPT.yes?('Is this your first time playing?', help_color: :green, active_color: :green)
+    puts "\n" * 2
     PROMPT.say("Who cares! We don't have enough content for that to matter right now!", color: :green)
-    puts " "
-    puts " "
+    puts "\n" * 2
     PROMPT.say("Ruby wizard will be an educational text-based game focused on Ruby as a programming language", color: :bright_red)
     PROMPT.say("Please enjoy what will hopefully be a pleasant experience, and apologies if you break the code...", color: :bright_red)
-    puts ""
+    puts "\n"
     PROMPT.say(". . . . . . . . . .", color: :red)
     PROMPT.say(". . . . . . . . . .", color: :red)
-    puts ""
+    puts "\n"
     PROMPT.say(". . . . . . . . . .", color: :red)
-    puts ""
+    puts "\n"
     PROMPT.say(". . . . . . . . . .", color: :red)
     PROMPT.say(". . . . . . . . . .", color: :red)
-    puts ""
+    puts "\n"
     PROMPT.say("...but you probably deserve it.", color: :bright_red)
-    puts ""
-    puts ""
+    puts "\n" * 2
     PROMPT.yes?('Are you ready to start?', help_color: :green, active_color: :green)
-    puts ""
-    puts ""
+    puts "\n" * 2
     PROMPT.say("Doesn't matter, let's go!", color: :bright_red)
-    puts ""
-    puts ""
-    puts ""
+    puts "\n" * 2
 
 end
 
 def end_screen
     PROMPT.say("As you stumble through the clearing ahead, you notice...nothing. Absolutely nothing for you to fight or do.", color: :bright_red)
-    PROMPT.ask("Did...did you win?")
+    PROMPT.ask("Did...did you win? Press enter to find out...")
     PROMPT.say("You did!!", color: :bright_red)
     PROMPT.ask("Press enter to win!")
     puts PASTEL.red(FONT.write(". . . . . . . . . . .", letter_spacing: 3))
@@ -54,6 +52,7 @@ end
 def spell_prompt
     puts "\n" * 3
     PROMPT.say("choose your spell wisely", color: :green)
+    puts "\n"
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
     PROMPT.say("You cast #{spell}!", color: :blue)
     spell
@@ -69,13 +68,18 @@ end
 def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
-    PROMPT.say("You cast #{spell}!", color: :blue)
+    PROMPT.say("You cast #{spell.name}!", color: :blue)
     if spell.name == "Inspect"
+        puts "\n"
         PROMPT.say("A #{target.name} is revealed!", color: :blue)
         target.stealth = false
+        puts "\n"
+        pp target.attributes
+        PROMPT.say("Look at all that information! See if your enemy has amor or an element, it could change your spell choice!", color: :bright_cyan)
+        puts "\n"
     else
         target.receive_spell(spell)
-        PROMPT.say("The #{target.name} has #{target.health} left!", color: :blue)
+        PROMPT.say("The #{target.name} has #{target.health}hp left!", color: :blue)
     end
 end
 
@@ -114,27 +118,32 @@ def player_turn(player, target)
 end
 
 def challenge_turn(player, challenge)
-    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} left.", color: :bright_green) 
+    puts "\n"
+    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health}hp left.", color: :bright_green) 
     player.take_damage(challenge.strength)
     player
 end
 
 def combat_victory(player)
     # TODO: Make this pretty
+    puts "\n"
     PROMPT.say("Your enemies lie broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
 end
 
 def combat_failure(player)
     # TODO: Make this pretty
-    puts "You lie broken and defeated. Your quest to become a mage is done."
+    puts "\n"
+    PROMPT.say("You lie broken and defeated. Your quest to become a mage is done.", color: :bright_magenta)
     game_status = "FAILED"
 end
 
 def enter_location(player)
     encounter_challenge = Challenge.find_by(id: player.current_encounter)
     location = Location.find_by(id: player.current_encounter)
+    puts "\n" * 2
     PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
+    puts "\n"
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
     #encounter_challenges.each do |challenge|
         if !encounter_challenge.stealth
@@ -142,6 +151,10 @@ def enter_location(player)
             PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
+        else
+            puts "\n"
+            PROMPT.say("You can't see anything...that can't be right, maybe try inspecting?", color: :bright_red)
+            puts "\n"
         end
     #end
 end
@@ -156,6 +169,7 @@ end
 
 def game_startup
     title_logo
+    puts "\n" * 2
     game_intro
     # reset_database
     name = PROMPT.ask("What is your name?")
