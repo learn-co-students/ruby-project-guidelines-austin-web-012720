@@ -17,6 +17,7 @@ class Bush < Challenge
         [
             {
                 damage: 0,
+                self_damage: 0,
                 description: "The Bush sits there and does nothing. What else did you expect?"
             }
         ]

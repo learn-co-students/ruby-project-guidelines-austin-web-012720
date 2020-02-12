@@ -17,10 +17,12 @@ class Bat < Challenge
         [
             {
                 damage: 1,
+                self_damage: 0,
                 description: "The #{self.name} swoops down and clips you with its wings." 
             },
             {
                 damage: 0,
+                self_damage: 0,
                 description: "The #{self.name} ignores you, grooming itself"
             }
         ]
