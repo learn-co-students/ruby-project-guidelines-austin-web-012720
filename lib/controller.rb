@@ -48,13 +48,11 @@ class Jeopardy
     def self.enter_password
         enter_password = PROMPT.mask('password:', echo: true,required: true)
         if enter_password == @@current_user.password
-            # binding.pry
             @@current_user
         else
             puts "\n" * 35
             puts "Trebek: That was an incorrect response.".light_red
             puts "Please try again!".light_yellow
-            # binding.pry
             self.enter_password
         end
     end
