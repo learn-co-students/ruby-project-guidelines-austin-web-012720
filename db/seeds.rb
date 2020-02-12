@@ -1,19 +1,18 @@
 require 'pry'
-User.destroy_all
-Stock.destroy_all
-Portfolio.destroy_all
+# User.destroy_all
+# Stock.destroy_all
+# Portfolio.destroy_all
 
-mike = User.find_or_create_by(:name => 'Mike', :password => 'hello')
-carlos = User.find_or_create_by(name: "Carlos", password: "bye")
+mike = User.create(:name => 'Mike', :password => 'hello')
+carlos = User.create(name: "Carlos", password: "bye")
 
-mike.buy_stock("AAPL")
-carlos.buy_stock("AAPL")
-
-
+aapl = Stock.create(symbol: "AAPL", price: 200, percent_change: 0.05)
 msft = Stock.create(symbol: "MSFT", price: 100, percent_change: 0.10)
 
-
+mike_aapl = Portfolio.create(user_id: mike.id, stock_id: aapl.id)
 mike_msft = Portfolio.create(user_id: mike.id, stock_id: msft.id)
+
+carlos_aapl = Portfolio.create(user_id: carlos.id, stock_id: aapl.id)
 
 
 
