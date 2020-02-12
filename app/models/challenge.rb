@@ -36,7 +36,7 @@ class Challenge < ActiveRecord::Base
     end
 
     def check_and_engage_element(spell)
-        if self.element
+        if self.element && spell.element
             engage_element(spell)
         end
     end
