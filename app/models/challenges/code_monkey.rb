@@ -6,7 +6,7 @@ class CodeMonkey < Challenge
        self.stealth ||= 1
        self.health ||= 15
        self.armor ||= 1
-       self.strength ||= 0 # for now becuase otherwise the player will die
+       self.strength ||= 1 # for now becuase otherwise the player will die
        self.element ||= "fire"
     end
 end

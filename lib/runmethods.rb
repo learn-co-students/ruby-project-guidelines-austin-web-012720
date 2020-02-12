@@ -124,12 +124,14 @@ end
 
 def challenge_turn(player, challenge)
     player.take_damage(challenge.strength)
+    puts "\n"
     PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :bright_green)
     player
 end
 
 def combat_victory(player)
     # TODO: Make this pretty
+    puts "\n"
     PROMPT.say("Your enemy lies broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
 end
