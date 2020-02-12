@@ -5,7 +5,7 @@ class Jeopardy
     
     def intro
         @think_song = Music.new('Jeopardy-theme-song.mp3')
-        # @think_song.play
+        @think_song.play
         Views.banner_jeopardy
         Jeopardy.main
     end
@@ -17,8 +17,8 @@ class Jeopardy
             # binding.pry
             Jeopardy.select_category
         else
-            Jeopardy.login
-            # binding.pry
+            test = Jeopardy.login
+            # should be returning the @current user
             Jeopardy.select_category
         end
     end
@@ -62,8 +62,31 @@ class Jeopardy
     end
 
     def self.select_category
-        #category returns a list of categories to select from
-        category = CategoryQuestion.get_category_questions
+        puts "\n" * 35
+        Views.select_category_banner
+        new_category_questions = CategoryQuestion.get_category_questions
+        random_selection = Category.all.sample(6)
+        category_strings = random_selection.map{|cat| cat.category_name}
+        binding.pry
+        selection = PROMPT.select("Select a category", category_strings)
+        binding.pry
+        case selection
+        when category_strings[0]
+            category_id = random_selection.find {|cat| cat.category_name == selection}.api_id
+            questions = CategoryQuestion.select{|cat| cat.category_id == category_id}
+        when category_strings[1]
+            puts "#{category_strings[1]}"
+        when category_strings[2]
+            puts "#{category_strings[2]}"
+        when category_strings[3]
+            puts "#{category_strings[3]}"
+        when category_strings[4]
+            puts "#{category_strings[4]}"
+        else category_strings[5]
+            puts "#{category_strings[5]}"
+        end
+        binding.pry
+        
     end
 
 

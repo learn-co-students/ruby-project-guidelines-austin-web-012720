@@ -14,4 +14,6 @@ class Category < ActiveRecord::Base
       end 
       #needs to return an array of category objects   
     end
+
+    
 end
