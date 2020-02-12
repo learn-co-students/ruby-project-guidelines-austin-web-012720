@@ -15,23 +15,28 @@ def game_intro
     puts "\n" * 2
     PROMPT.say("Who cares! We don't have enough content for that to matter right now!", color: :green)
     puts "\n" * 2
+    sleep(1)
     PROMPT.say("Ruby wizard will be an educational text-based game focused on Ruby as a programming language", color: :bright_red)
     PROMPT.say("Please enjoy what will hopefully be a pleasant experience, and apologies if you break the code...", color: :bright_red)
     puts "\n"
+    sleep(3)
     PROMPT.say(". . . . . . . . . .", color: :red)
-    PROMPT.say(". . . . . . . . . .", color: :red)
+    sleep(1)
     puts "\n"
     PROMPT.say(". . . . . . . . . .", color: :red)
+    sleep(1)
     puts "\n"
     PROMPT.say(". . . . . . . . . .", color: :red)
-    PROMPT.say(". . . . . . . . . .", color: :red)
+    sleep(1)
     puts "\n"
     PROMPT.say("...but you probably deserve it.", color: :bright_red)
     puts "\n" * 2
     PROMPT.yes?('Are you ready to start?', help_color: :green, active_color: :green)
+    sleep 1.2
     puts "\n" * 2
     PROMPT.say("Doesn't matter, let's go!", color: :bright_red)
     puts "\n" * 2
+    sleep(2)
 
 end
 
@@ -82,10 +87,19 @@ def cast_spell(player, spell, target)
         PROMPT.say("A #{target.name} is revealed!", color: :blue)
         target.stealth = false
         puts "\n"
-        pp target.attributes
+        PROMPT.say("Name: ", color: :red)
+        PROMPT.say("#{target.name}", color: :green)
+        PROMPT.say("Description: ", color: :red)
+        PROMPT.say("#{target.description}", color: :green)
+        PROMPT.say("Armor: ", color: :red)
+        PROMPT.say("#{target.armor}", color: :green)
+        PROMPT.say("Element: ", color: :red)
+        PROMPT.say("#{target.element}", color: :green)
+        puts "\n"
         puts "\n"
         PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :bright_cyan)
         puts "\n"
+        PROMPT.ask("(Take a moment to read and press enter to continue when ready...)")
     else
         target.receive_spell(spell)
         PROMPT.say("The #{target.name} has #{target.health}hp left!", color: :blue)
@@ -124,18 +138,20 @@ def player_turn(player, target)
     spell = Spell.find_by(name: spell_name)
     cast_spell(player, spell, target)
     player
+    sleep 1.2
 end
 
 def challenge_turn(player, challenge)
     player.take_damage(challenge.strength)
     puts "\n"
     PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
-    PROMPT.say(   "#{challenge.name} takes a turn!", color: :red)
+    PROMPT.say("     #{challenge.name} takes a turn!", color: :red)
     PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
     puts "\n"
     PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
     puts "\n"
     player
+    sleep(1)
 end
 
 def combat_victory(player)
@@ -157,10 +173,24 @@ end
 def enter_location(player)
     encounter_challenge = Challenge.find_by(id: player.current_encounter)
     location = Location.find_by(id: player.current_encounter)
+    box = TTY::Box.frame(width: 110, height: 5, align: :center, title: {top_left: location.name}, 
+        style: {
+            fg: :bright_green,
+            bg: :black,
+            border: {
+              fg: :bright_red,
+              bg: :black
+            }
+          }) do
+        "#{location.description}"
+    end
     puts "\n" * 2
-    PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
+    print box
+    sleep(3)
+    #PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
     puts "\n"
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
+    sleep(3)
     #encounter_challenges.each do |challenge|
         if !encounter_challenge.stealth
             puts "\n"
