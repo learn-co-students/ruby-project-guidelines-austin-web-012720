@@ -1,36 +1,85 @@
 require 'ruby2d'
+# require 'japi'
 
 
 class Jeopardy
+
+    @@score = 0
     
-    def intro
-        # @think_song = Music.new('Jeopardy-theme-song.mp3')
-        # @think_song.play
+        def intro
+        @think_song = Music.new('Jeopardy-theme-song.mp3')
+        @think_song.play
         Views.banner_jeopardy
-        Jeopardy.main
+        Jeopardy.greeting
     end
 
-    def self.main
+    def self.greeting
         yes_or_no = PROMPT.yes?("Welcome to Jeopardy! Are you a new user?")
         if yes_or_no
             @@current_user = User.create_user
-            Jeopardy.select_category
+            Jeopardy.about
         else
             test = Jeopardy.login
             # should be returning the @current user
-            Jeopardy.select_category
+            Jeopardy.main_menu
         end
     end
 
+    def self.main_menu
+        puts "\n" *35
+        Views.banner_jeopardy
+        selection = PROMPT.select("",%w(Play Study Return_to_Main))
+        case selection
+        when "Play"
+            Jeopardy.about
+        when "Study"
+            UserQuestion.study(@@current_user)
+            
+        else
+            Jeopardy.greeting
+        end
+
+    end
+
+    def self.about
+        Views.banner_jeopardy
+        print "Johnny Gilbert:".light_yellow
+        puts"And now, here is the host of Jeopardy; Alex Trebek!"
+        puts "\n" * 5
+        sleep(4)
+        print "Trebek:".light_green
+        puts "Jeopardy Lite will get you ready for your Jeopardy debut."
+        puts "\n" * 5
+        sleep(4)
+        puts "Each incorrect response will be saved to your account for you to study."
+        puts "\n" * 5
+        sleep(4)
+        puts "You will have one minute in Jeopardy and the Double Jeopardy rounds to answer questions."
+        puts "\n" * 5
+        sleep(5)
+        puts "On the Final Jeopardy round, you can place your wager and you will be given 30 seconds to guess the correct answer."
+        Views.banner_jeopardy
+        ready = PROMPT.yes?("The time will start now. Are you ready?")
+        if ready 
+            Jeopardy.select_category
+        else
+            Jeopardy.main_menu
+        end
+    end
+
+
     def self.login
-        login_or_exit = PROMPT.select("", %w(Login Exit))
+        login_or_exit = PROMPT.select("", %w(Login Exit Delete_unusable_categories))
         case login_or_exit
         when "Login"
             self.find_user
             self.enter_password
-        else "Exit"
-          puts "Thank you for playing."
-          exit                  
+        when "Exit"
+            Views.banner_exit
+            sleep(3)
+          exit     
+        else "Delete_unusable_categories"
+            Question.check_category_length             
         end       
     end
 
@@ -60,35 +109,166 @@ class Jeopardy
     def self.select_category
         puts "\n" * 35
         Views.select_category_banner
-        #this is the api call with all the questions
-        new_category_questions = Question.get_category_questions
         random_selection = Question.all.sample(6)
         binding.pry
         #       check_variable = Quesion.check_enough_questions(random_selection)
         #need to check if their are enough questions
         category_strings = random_selection.map{|cat| cat.category}
-        binding.pry_
         selection = PROMPT.select("Select a category", category_strings)
-        #once we select a category we need to find all questions associated with it and save that
-        #if category doesn't have 5 questions
+        questions = Question.all.select {|question| question.category == selection}
         case selection
         when category_strings[0]
-            
-            Question.select_value(selection)
-            puts "#{category_strings[0]}"
-            
-            binding.pry
-    
+            # binding.pry
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save
+                binding.pry
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
+            # binding.pry
         when category_strings[1]
-            puts "#{category_strings[1]}"
+
+
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end        
         when category_strings[2]
-            puts "#{category_strings[2]}"
+
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         when category_strings[3]
-            puts "#{category_strings[3]}"
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         when category_strings[4]
-            puts "#{category_strings[4]}"
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         else category_strings[5]
-            puts "#{category_strings[5]}"
+
+            value = Views.select_value.to_i
+            if questions.find {|q| q.value == value} == nil
+                user_question = questions.first
+            else
+                user_question = questions.find {|q| q.value == value}
+            end
+             answer = Views.display_question(user_question,questions,value)
+             if answer == user_question.answer
+                @@score += value
+                print "Trebek:".light_green
+                puts "That is correct"
+                puts "Your score: #{@@score}"
+                # binding.pry
+             else
+                @@score -= value 
+                print "Trebek:".light_green
+                print "That is incorrect.".light_red
+                puts "The correct response is #{user_question.answer}. "
+                puts "Your score: #{@@score}"
+                # binding.pry
+
+             end
         end
+        # binding.pry
     end
+
+
+
+
 end

@@ -21,11 +21,15 @@ class Question < ActiveRecord::Base
       end 
     end
 
-    def self.select_value(category)
-      questions = Question.all.select {|question| question.category == category}
-      binding.pry
-      select_value = PROMPT.select("Select value", %w(100 200 400 600 800 1000))
+    def self.check_category_length
+      categories = Question.all.map {|q| q.category}.uniq
+      categories.each do |c|
+        if Question.all.select {|question| question.category == c}.length < 5
+          Question.where(category: c).destroy_all
+        end
+      end
     end
+
   
     def self.check_enough_questions(question_sample)
       categories_to_check = question_sample.map {|question| question.category}
