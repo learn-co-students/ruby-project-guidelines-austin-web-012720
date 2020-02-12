@@ -54,8 +54,10 @@ end
 
 
 def spell_prompt
-    puts "\n" * 3
-    PROMPT.say("choose your spell wisely", color: :green)
+    puts "\n" * 1
+    PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :red)
+    PROMPT.say("     It's your turn now!", color: :green)
+    PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :red)
     puts "\n"
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
     
@@ -73,6 +75,7 @@ end
 def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
+    puts "\n"
     PROMPT.say("You cast #{spell.name}!", color: :blue)
     if spell.name == "Inspect"
         puts "\n"
@@ -80,7 +83,8 @@ def cast_spell(player, spell, target)
         target.stealth = false
         puts "\n"
         pp target.attributes
-        PROMPT.say("Look at all that information! See if your enemy has amor or an element, it could change your spell choice!", color: :bright_cyan)
+        puts "\n"
+        PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :bright_cyan)
         puts "\n"
     else
         target.receive_spell(spell)
@@ -125,7 +129,12 @@ end
 def challenge_turn(player, challenge)
     player.take_damage(challenge.strength)
     puts "\n"
-    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :bright_green)
+    PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+    PROMPT.say(   "#{challenge.name} takes a turn!", color: :red)
+    PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+    puts "\n"
+    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
+    puts "\n"
     player
 end
 
@@ -134,6 +143,7 @@ def combat_victory(player)
     puts "\n"
     PROMPT.say("Your enemy lies broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
+    puts "\n"
 end
 
 def combat_failure(player)
@@ -141,6 +151,7 @@ def combat_failure(player)
     puts "\n"
     PROMPT.say("You lie broken and defeated. Your quest to become a mage is done.", color: :bright_magenta)
     "FAILED"
+    puts "\n"
 end
 
 def enter_location(player)
@@ -152,9 +163,13 @@ def enter_location(player)
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
     #encounter_challenges.each do |challenge|
         if !encounter_challenge.stealth
+            puts "\n"
+            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             PROMPT.say("You spotted one!", color: :red)
             PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+            puts "\n"
             PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
         else
             puts "\n"
