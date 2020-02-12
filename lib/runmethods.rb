@@ -63,14 +63,20 @@ def target_prompt(targets)
     puts "\n" * 3
     PROMPT.say("choose your spell wisely", color: :green)
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
-    PROMPT.say("You cast #{spell}!", color: :blue)
     spell
 end
 
 def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
-    target.receive_spell(spell)
+    PROMPT.say("You cast #{spell}!", color: :blue)
+    if spell.name == "Inspect"
+        PROMPT.say("A #{target.name} is revealed!", color: :blue)
+        target.stealth = false
+    else
+        target.receive_spell(spell)
+        PROMPT.say("The #{target.name} has #{target.health} left!", color: :blue)
+    end
 end
 
 def combat(player, challenge)
@@ -149,9 +155,9 @@ def reset_database
 end
 
 def game_startup
-    #title_logo
-    #game_intro
-    #reset_database
+    title_logo
+    game_intro
+    # reset_database
     name = PROMPT.ask("What is your name?")
     player = Spellbot.new(name: name, current_encounter: 1)
     # TODO: change the number of challenges
@@ -166,6 +172,6 @@ def game_startup
         encounter.save # TODO: may need to move this
         player.current_encounter += 1
     end
-    #end_screen
+    end_screen
 end
 

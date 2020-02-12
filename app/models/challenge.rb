@@ -1,6 +1,17 @@
 class Challenge < ActiveRecord::Base
     belongs_to :encounter
     has_many :locations, through: :encounters
+    after_initialize :init
+
+    def init
+        self.name ||= ""
+        self.description ||= nil
+        self.element ||= nil
+        self.health ||= 10
+        self.armor ||= 0
+        self.strength ||= 0
+        self.stealth ||= false
+    end
 
     def take_damage(damage)
         if self.armor < damage
