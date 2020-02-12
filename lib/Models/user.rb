@@ -151,26 +151,53 @@ class User < ActiveRecord::Base
     end 
 
     def sell_stock(symbol, shares)
+        stock = Stock.find_by(symbol: symbol)
+        id = stock.id
+            
+        user_stock = self.portfolios.find_by(stock_id: id)
+        shares = shares.to_f
 
-        if !get_symbols_portfolio.any? do |stock|
-            stock == symbol.upcase
+        if !get_symbols_portfolio.any? do |stock1|
+            stock1 == symbol.upcase
             end
             puts "\n" * 40
             puts "You don't own #{symbol} stock."
-        else 
-        
-            stock = Stock.find_by(symbol: symbol)
-            id = stock.id
             
-            user_stock = self.portfolios.find_by(stock_id: id)
+        elsif shares > user_stock.shares
+            puts "\n" * 30
+            puts "You don't have enough shares."
+        elsif shares < user_stock.shares
             stock_shares = user_stock.shares
-            user_stock.update(shares: stock_shares - shares.to_f)
-            puts "\n" * 80
+            user_stock.update(shares: stock_shares - shares)
+            puts "\n" * 10
             puts FONT.write("#{symbol}")  
-            puts "You just sold #{symbol} stock."
-        end 
-        
+            puts "You just sold #{shares} #{symbol} shares."
+        else shares = user_stock.shares
+           user_stock.destroy
+           puts "\n" * 10
+            puts FONT.write("#{symbol}")  
+            puts "You just sold #{shares} #{symbol} shares."
+        end
     end 
+
+    # def shares_conditional(user_stock, shares, symbol)
+    #     case shares
+            
+    #     when shares > user_stock.shares
+    #         binding.pry
+
+    #         puts "You don't have enough shares."
+    #     when shares < user_stock.shares
+    #         stock_shares = user_stock.shares
+    #         user_stock.update(shares: stock_shares - shares)
+    #     when shares = user_stock.shares
+    #         user_stock.destroy
+    #     end 
+    #     binding.pry
+    #     puts "\n" * 80
+    #     puts FONT.write("#{symbol}")  
+    #     puts "You just sold #{symbol} stock."
+    # end 
 
     def most_bought_stock
         new_stock = Stock.all.max_by do |stock|
