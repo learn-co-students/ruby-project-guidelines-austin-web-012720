@@ -12,4 +12,28 @@ class Werewolf < Challenge
         self.strength ||= 0
         self.stealth ||= true
     end
+
+    def attacks
+        [
+            {
+                damage: 1,
+                self_damage: 0,
+                description: "The #{self.name} howls at you filling you with dread." 
+            },
+            {
+                damage: 0,
+                self_damage: 0,
+                description: "The #{self.name} ignores you, grooming itself"
+            },
+            {
+                damage: 2,
+                self_damage: 0,
+                description: "The #{self.name} bites you. You think you hear a faint sound of static coming from far away. Or is that just in your mind?"
+            }
+        ]
+    end
+
+    def get_random_attack
+        attacks.sample
+    end
 end

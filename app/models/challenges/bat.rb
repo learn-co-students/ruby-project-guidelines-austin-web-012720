@@ -12,4 +12,21 @@ class Bat < Challenge
         self.strength ||= 1
         self.stealth ||= true
     end
+
+    def attacks
+        [
+            {
+                damage: 1,
+                description: "The #{self.name} swoops down and clips you with its wings." 
+            },
+            {
+                damage: 0,
+                description: "The #{self.name} ignores you, grooming itself"
+            }
+        ]
+    end
+
+    def get_random_attack
+        attacks.sample
+    end
 end

@@ -12,4 +12,17 @@ class Bush < Challenge
         self.strength ||= 0
         self.stealth ||= 0
     end
+
+    def attacks
+        [
+            {
+                damage: 0,
+                description: "The Bush sits there and does nothing. What else did you expect?"
+            }
+        ]
+    end
+
+    def get_random_attack
+        attacks.sample
+    end
 end

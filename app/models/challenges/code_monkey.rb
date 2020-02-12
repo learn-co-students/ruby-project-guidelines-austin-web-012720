@@ -9,4 +9,28 @@ class CodeMonkey < Challenge
        self.strength ||= 1 # for now becuase otherwise the player will die
        self.element ||= "fire"
     end
+
+    def attacks
+        [
+            {
+                damage: 1,
+                self_damage: 1,
+                description: "The #{self.name} flings a stick at you while screaming that you don't know anything! It then huddles up on the branch and mutters to itself, petting its tail in a self-reasuring manner" 
+            },
+            {
+                damage: 0,
+                self_damage: 0,
+                description: "The #{self.name} ignores you, grooming itself"
+            },
+            {
+                damage: 2,
+                self_damage: 0,
+                description: "The #{self.name} punches you in the jaw."
+            }
+        ]
+    end
+
+    def get_random_attack
+        attacks.sample
+    end
 end
