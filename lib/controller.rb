@@ -4,8 +4,8 @@ require 'ruby2d'
 class Jeopardy
     
     def intro
-        @think_song = Music.new('Jeopardy-theme-song.mp3')
-        @think_song.play
+        # @think_song = Music.new('Jeopardy-theme-song.mp3')
+        # @think_song.play
         Views.banner_jeopardy
         Jeopardy.main
     end
@@ -60,15 +60,25 @@ class Jeopardy
     def self.select_category
         puts "\n" * 35
         Views.select_category_banner
+        #this is the api call with all the questions
         new_category_questions = Question.get_category_questions
         random_selection = Question.all.sample(6)
+        binding.pry
+        #       check_variable = Quesion.check_enough_questions(random_selection)
+        #need to check if their are enough questions
         category_strings = random_selection.map{|cat| cat.category}
-        
+        binding.pry_
         selection = PROMPT.select("Select a category", category_strings)
-
+        #once we select a category we need to find all questions associated with it and save that
+        #if category doesn't have 5 questions
         case selection
         when category_strings[0]
+            
+            Question.select_value(selection)
             puts "#{category_strings[0]}"
+            
+            binding.pry
+    
         when category_strings[1]
             puts "#{category_strings[1]}"
         when category_strings[2]
@@ -80,8 +90,5 @@ class Jeopardy
         else category_strings[5]
             puts "#{category_strings[5]}"
         end
-        binding.pry
     end
-
-
 end

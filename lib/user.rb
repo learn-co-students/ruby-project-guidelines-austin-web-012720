@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
     has_many :user_questions
-    has_many :questions, through: :user_question 
+    has_many :questions, through: :user_questions 
 
     def self.create_user
         puts "\n" * 35
@@ -43,13 +43,6 @@ class User < ActiveRecord::Base
             puts "Those didn't match. Please try again!".light_red
             self.set_password
         end
-    end
-
-
-
-    # def self.login
-
-    # end
-    
+    end  
 
 end
