@@ -105,7 +105,7 @@ def cast_spell(player, spell, target)
     else
         target.receive_spell(spell)
         if !target.stealth
-            PROMPT.say("The #{target.name} has #{target.health}hp left!", color: :blue)
+            PROMPT.say("The #{target.name} has #{target.health} health left!", color: :blue)
         else
             PROMPT.say("You can't see anything at all. I hope you aren't taking damage!", color: :blue)
         end
@@ -148,7 +148,6 @@ def player_turn(player, target)
 end
 
 def challenge_turn(player, challenge)
-    player.take_damage(challenge.strength)
     puts "\n"
     if !challenge.stealth
         PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
@@ -160,10 +159,19 @@ def challenge_turn(player, challenge)
         PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
     end
     puts "\n"
-    if !challenge.stealth
-        PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
+    attack = challenge.get_random_attack
+    player.take_damage(attack[:damage])
+    if challenge.visible?
+        if attack[:damage] == 0
+            PROMPT.say("Nothing happened. You still feel there's something watching you.", color: :blue)
+        else
+            PROMPT.say("Something attacks you. You take #{attack[:damage]} damage. You now have #{player.health} health left. You should figure out what is in here!", color: :blue)
+        end
     else
-        PROMPT.say("Something attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left. You should figure out what is in here!", color: :blue)
+            PROMPT.say("#{attack[:description]}", color: :blue)
+        if attack[:damage] > 0
+            PROMPT.say("You take #{attack[:damage]} damage. You now have #{player.health} health left.", color: :blue)
+        end
     end
     puts "\n"
     player
