@@ -10,20 +10,63 @@ class Jeopardy
         @think_song = Music.new('Jeopardy-theme-song.mp3')
         @think_song.play
         Views.banner_jeopardy
-        Jeopardy.main
+        Jeopardy.greeting
     end
 
-    def self.main
+    def self.greeting
         yes_or_no = PROMPT.yes?("Welcome to Jeopardy! Are you a new user?")
         if yes_or_no
             @@current_user = User.create_user
-            Jeopardy.select_category
+            Jeopardy.about
         else
             test = Jeopardy.login
             # should be returning the @current user
-            Jeopardy.select_category
+            Jeopardy.main_menu
         end
     end
+
+    def self.main_menu
+        puts "\n" *35
+        Views.banner_jeopardy
+        selection = PROMPT.select("",%w(Play Study Return_to_Main))
+        case selection
+        when "Play"
+            Jeopardy.about
+        when "Study"
+            UserQuestion.study(@@current_user)
+            
+        else
+            Jeopardy.greeting
+        end
+
+    end
+
+    def self.about
+        Views.banner_jeopardy
+        print "Johnny Gilbert:".light_yellow
+        puts"And now, here is the host of Jeopardy; Alex Trebek!"
+        puts "\n" * 5
+        sleep(4)
+        print "Trebek:".light_green
+        puts "Jeopardy Lite will get you ready for your Jeopardy debut."
+        puts "\n" * 5
+        sleep(4)
+        puts "Each incorrect response will be saved to your account for you to study."
+        puts "\n" * 5
+        sleep(4)
+        puts "You will have one minute in Jeopardy and the Double Jeopardy rounds to answer questions."
+        puts "\n" * 5
+        sleep(5)
+        puts "On the Final Jeopardy round, you can place your wager and you will be given 30 seconds to guess the correct answer."
+        Views.banner_jeopardy
+        ready = PROMPT.yes?("The time will start now. Are you ready?")
+        if ready 
+            Jeopardy.select_category
+        else
+            Jeopardy.main_menu
+        end
+    end
+
 
     def self.login
         login_or_exit = PROMPT.select("", %w(Login Exit Delete_unusable_categories))
@@ -32,7 +75,8 @@ class Jeopardy
             self.find_user
             self.enter_password
         when "Exit"
-          puts "Thank you for playing."
+            Views.banner_exit
+            sleep(3)
           exit     
         else "Delete_unusable_categories"
             Question.check_category_length             
@@ -89,6 +133,9 @@ class Jeopardy
                 # binding.pry
              else
                 @@score -= value 
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save
+                binding.pry
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
