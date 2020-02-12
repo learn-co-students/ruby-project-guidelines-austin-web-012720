@@ -91,6 +91,8 @@ def cast_spell(player, spell, target)
         PROMPT.say("#{target.name}", color: :green)
         PROMPT.say("Description: ", color: :red)
         PROMPT.say("#{target.description}", color: :green)
+        PROMPT.say("Current Health: ", color: :red)
+        PROMPT.say("#{target.health}", color: :green)
         PROMPT.say("Armor: ", color: :red)
         PROMPT.say("#{target.armor}", color: :green)
         PROMPT.say("Element: ", color: :red)
@@ -102,7 +104,11 @@ def cast_spell(player, spell, target)
         PROMPT.ask("(Take a moment to read and press enter to continue when ready...)")
     else
         target.receive_spell(spell)
-        PROMPT.say("The #{target.name} has #{target.health}hp left!", color: :blue)
+        if !target.stealth
+            PROMPT.say("The #{target.name} has #{target.health}hp left!", color: :blue)
+        else
+            PROMPT.say("You can't see anything at all. I hope you aren't taking damage!", color: :blue)
+        end
     end
 end
 
@@ -144,11 +150,21 @@ end
 def challenge_turn(player, challenge)
     player.take_damage(challenge.strength)
     puts "\n"
-    PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
-    PROMPT.say("     #{challenge.name} takes a turn!", color: :red)
-    PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+    if !challenge.stealth
+        PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+        PROMPT.say("     #{challenge.name} takes a turn!", color: :red)
+        PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+    else
+        PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+        PROMPT.say("The unknown enemy takes a turn!", color: :red)
+        PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
+    end
     puts "\n"
-    PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
+    if !challenge.stealth
+        PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
+    else
+        PROMPT.say("Something attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left. You should figure out what is in here!", color: :blue)
+    end
     puts "\n"
     player
     sleep(1)

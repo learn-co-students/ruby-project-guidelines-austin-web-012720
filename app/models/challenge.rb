@@ -32,6 +32,7 @@ class Challenge < ActiveRecord::Base
             spell.damage = 0
         else
             spell.damage *= 2
+            PROMPT.say("Your element choice is super effective!", color: :bright_magenta)
         end
     end
 
