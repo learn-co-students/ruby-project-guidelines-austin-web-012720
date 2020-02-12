@@ -1,3 +1,4 @@
+game_status = "RUNNING"
 def title_logo
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
@@ -49,36 +50,84 @@ def end_screen
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^^^", letter_spacing: 2))
 end
 
+
 def spell_prompt
+    puts "\n" * 3
+    PROMPT.say("choose your spell wisely", color: :green)
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
     PROMPT.say("You cast #{spell}!", color: :blue)
     spell
 end
 
-def cast_spell(spell_name, challenge_id)
-    spell = Spell.find_by(name: spell_name)
-    target = Challenge.find_by(id: challenge_id)
+def target_prompt(targets)
+    puts "\n" * 3
+    PROMPT.say("choose your spell wisely", color: :green)
+    spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
+    PROMPT.say("You cast #{spell}!", color: :blue)
+    spell
+end
+
+def cast_spell(player, spell, target)
     # will modify based on attributes later
+    # boost spell damage based on player attributes, etc.
     target.receive_spell(spell)
 end
 
-def combat(challenge_id)
-    encounter_challenge = Challenge.find_by(id: challenge_id)
-    location = Location.find_by(id: challenge_id)
-    puts ""
-    puts ""
-    puts ""
-    if encounter_challenge.health > 0 
-        PROMPT.say("choose your spell wisely", color: :green)
-        spell_name = spell_prompt
-        cast_spell(spell_name, challenge_id)
-    end
+def combat(player, challenge)
+    # TODO: Singular challenge currently, will get multi-challenge support working later
+    while(true)
+        player_turn(player, challenge)
+    #   TODO: multi targets later 
+    #   if not challenges.any?{ |challenge| challenge.health > 0}
+        if challenge.health < 0
+            combat_victory(player)
+            break;
+        end
 
+        challenge_turn(player, challenge)
+        if player.health <= 0
+            combat_failure(player)
+            break;
+        end
+
+    #   challenges.each do |challenge|
+    #       challenge_turn(player, challenge)
+    #       if player.health <= 0
+    #           combat_failure(player)
+    #           break;
+    #       end
+    #    end
+    end
 end
 
-def enter_location(challenge_id)
-    encounter_challenge = Challenge.find_by(id: challenge_id)
-    location = Location.find_by(id: challenge_id)
+def player_turn(player, target)
+    spell_name = spell_prompt
+    spell = Spell.find_by(name: spell_name)
+    cast_spell(player, spell, target)
+    player
+end
+
+def challenge_turn(player, challenge)
+    puts "The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} left."
+    player.take_damage(challenge.strength)
+    player
+end
+
+def combat_victory(player)
+    # TODO: Make this pretty
+    puts "Your enemies lie broken and defeated before you. What awaits you in your next challenge?"
+    "VICTORY"
+end
+
+def combat_failure(player)
+    # TODO: Make this pretty
+    puts "You lie broken and defeated. Your quest to become a mage is done."
+    game_status = "FAILED"
+end
+
+def enter_location(player)
+    encounter_challenge = Challenge.find_by(id: player.current_encounter)
+    location = Location.find_by(id: player.current_encounter)
     PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
     #encounter_challenges.each do |challenge|
@@ -89,11 +138,6 @@ def enter_location(challenge_id)
             PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
         end
     #end
-end
-
-def initialize_and_complete_combat(player)
-    enter_location(player.current_encounter)
-    combat(player.current_encounter)
 end
 
 def reset_database
@@ -109,8 +153,19 @@ def game_startup
     #game_intro
     #reset_database
     name = PROMPT.ask("What is your name?")
-    player = Spellbot.create(name: name, current_encounter: 1)
-    initialize_and_complete_combat(player)
+    player = Spellbot.new(name: name, current_encounter: 1)
+    # TODO: change the number of challenges
+    while not Encounter.last.complete
+        enter_location(player)
+        encounter = Encounter.find_by(id: player.current_encounter)
+        challenge = Challenge.find_by(id: player.current_encounter)
+        # TODO: Will make multiple enemies available later. One enemy per challenge currently
+        # challenges = Challenge.all.collect{ |challenge| Challenge.new(challenge) }
+        combat(player, challenge)
+        encounter.complete = true
+        encounter.save # TODO: may need to move this
+        player.current_encounter += 1
+    end
     #end_screen
 end
 

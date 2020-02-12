@@ -11,6 +11,10 @@ class Spellbot < ActiveRecord::Base
         self.current_encounter ||= 1
     end
 
+    def take_damage(damage)
+        self.health -= damage
+    end
+
     def change_encounter(encounter_num = self.current_encounter + 1)
         self.current_encounter += 1
         self.save

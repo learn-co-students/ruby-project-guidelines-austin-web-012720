@@ -34,8 +34,9 @@ class Challenge < ActiveRecord::Base
         if self.visible?
             check_and_engage_element(spell)
             self.take_damage(spell.damage)
+            spell.damage
         else
-            print "There is nothing to target!"
+            "There is nothing to target!"
         end
     end
 end

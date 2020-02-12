@@ -9,6 +9,7 @@ class Bush < Challenge
         self.element ||= nil
         self.health ||= 3
         self.armor ||= 0
+        self.strength ||= 0
         self.stealth ||= 0
     end
 end
