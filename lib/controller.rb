@@ -14,7 +14,6 @@ class Jeopardy
         yes_or_no = PROMPT.yes?("Welcome to Jeopardy! Are you a new user?")
         if yes_or_no
             @@current_user = User.create_user
-            # binding.pry
             Jeopardy.select_category
         else
             test = Jeopardy.login
@@ -30,9 +29,8 @@ class Jeopardy
             self.find_user
             self.enter_password
         else "Exit"
-#NEED TO REDIRECT TO SOMEWHERE WHEN EXIT SELECTED
-            # intro  
-            binding.pry                 
+          puts "Thank you for playing."
+          exit                  
         end       
     end
 
@@ -65,15 +63,14 @@ class Jeopardy
         puts "\n" * 35
         Views.select_category_banner
         new_category_questions = CategoryQuestion.get_category_questions
-        random_selection = Category.all.sample(6)
+        random_selection = CategoryQuestion.all.sample(6)
         category_strings = random_selection.map{|cat| cat.category_name}
-        binding.pry
+        
         selection = PROMPT.select("Select a category", category_strings)
-        binding.pry
+
         case selection
         when category_strings[0]
-            category_id = random_selection.find {|cat| cat.category_name == selection}.api_id
-            questions = CategoryQuestion.select{|cat| cat.category_id == category_id}
+            puts "#{category_strings[0]}"
         when category_strings[1]
             puts "#{category_strings[1]}"
         when category_strings[2]
@@ -86,7 +83,6 @@ class Jeopardy
             puts "#{category_strings[5]}"
         end
         binding.pry
-        
     end
 
 

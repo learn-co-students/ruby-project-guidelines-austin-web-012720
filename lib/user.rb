@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
     has_many :user_categories
-    has_many :categories, through: :user_categories  
+    has_many :category_questions, through: :user_category 
 
     def self.create_user
         puts "\n" * 35
