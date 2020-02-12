@@ -55,7 +55,7 @@ def spell_prompt
     puts "\n" * 3
     PROMPT.say("choose your spell wisely", color: :green)
     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
-    PROMPT.say("You cast #{spell}!", color: :blue)
+    
     spell
 end
 
@@ -69,7 +69,7 @@ end
 def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
-    PROMPT.say("You cast #{spell}!", color: :blue)
+    PROMPT.say("You cast #{spell.name}!", color: :blue)
     if spell.name == "Inspect"
         PROMPT.say("A #{target.name} is revealed!", color: :blue)
         target.stealth = false
