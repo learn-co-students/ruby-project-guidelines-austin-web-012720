@@ -16,19 +16,27 @@ class User < ActiveRecord::Base
 
     def get_symbols_portfolio
         output = get_portfolio_stocks
-        
-        new_array = output.map do |x, y|
-             x.symbol
+
+        market_value = get_portfolio_stocks.sum do |stock, y|
+            stock.price
         end 
-        if new_array == []
+        stock_and_price = output.map do |x, y|
+             "#{x.symbol}  $#{x.price}"
+        end 
+
+        symbols = output.map do |x, y|
+            "#{x.symbol}"
+       end 
+        if stock_and_price == []
             puts "\n" * 10
             puts "Your portfolio is empty."
         else 
             puts "\n" * 10
             puts "Your porfolio has these stocks:"
-            puts new_array
+            puts stock_and_price
+            puts "\nYour Total Portfolio Market Value: $#{market_value}"
         end 
-        new_array
+        symbols
     end 
 
     def look_up(symbol)
@@ -110,9 +118,6 @@ class User < ActiveRecord::Base
     end 
 
     def sell_stock(symbol)
-
-        
-
 
         if !get_symbols_portfolio.any? do |stock|
             stock == symbol.upcase
