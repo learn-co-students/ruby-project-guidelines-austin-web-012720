@@ -2,28 +2,52 @@ class User < ActiveRecord::Base
     has_many :portfolios
     has_many :stocks, through: :portfolios
 
-    def  get_portfolio_stocks
+    def get_stock_ids_user
         user_id = self.id 
         array = Portfolio.where(user_id: user_id)
         
         stock_ids = array.map do |relationship|
             relationship.stock_id
         end 
-        output = stock_ids.map do |id|
+    end 
+
+    def get_stock_shares(stock_id) 
+        user_stock = Portfolio.find_by(user_id: self.id, stock_id: stock_id)
+        user_stock.shares
+    end 
+
+    def  get_portfolio_stocks
+        
+        output = get_stock_ids_user.map do |id|
             Stock.where("id = ?", id)
         end
     end 
 
     def get_symbols_portfolio
         output = get_portfolio_stocks
-
+        
         market_value = get_portfolio_stocks.sum do |stock, y|
             stock.price
         end 
+        
         stock_and_price = output.map do |x, y|
-             "#{x.symbol}  $#{x.price}"
+            [x.symbol, x.price]
+        end 
+        # binding.pry
+
+        shares_array = output.map do |stock, x|
+            get_stock_shares(stock.id)
+        end  
+        i = 0
+        portfolio = stock_and_price.each do |stock|
+            
+            stock.push(shares_array[i])
+            i = i + 1
         end 
 
+
+
+        # binding.pry
         symbols = output.map do |x, y|
             "#{x.symbol}"
        end 
@@ -33,7 +57,9 @@ class User < ActiveRecord::Base
         else 
             puts "\n" * 10
             puts "Your porfolio has these stocks:"
-            puts stock_and_price
+            portfolio.each do |stock|
+                puts "#{stock[0]} $#{stock[1]}  #{stock[2]} shares"
+            end 
             puts "\nYour Total Portfolio Market Value: $#{market_value}"
         end 
         symbols
@@ -102,18 +128,17 @@ class User < ActiveRecord::Base
         
     end 
 
-   
-
-    def buy_stock(symbol)
+   def buy_stock(symbol, shares)
         hash = look_up(symbol)
         if hash != nil
             stock = Stock.find_or_create_by(symbol: hash[:symbol])
             stock.update(price: hash[:price])
             stock.update(percent_change: hash[:percent_change])
-            Portfolio.create(user_id: self.id, stock_id: stock.id)
+            user_stock = Portfolio.find_or_create_by(user_id: self.id, stock_id: stock.id, shares: shares)
+            user_stock.update(shares: shares)
             puts "\n" * 80
             puts FONT.write("#{symbol}") 
-            puts "You bought #{symbol} stock."
+            puts "You bought #{shares} shares of #{symbol} stock."
         end
     end 
 

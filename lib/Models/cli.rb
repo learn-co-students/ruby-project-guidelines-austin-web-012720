@@ -79,7 +79,8 @@ class CommandLineInterface < User
                 end 
             when "2"
                 symbol = PROMPT.ask("Type in a stock symbol\n")
-                @user.buy_stock(symbol.upcase)
+                shares = PROMPT.ask("Type in number of shares\n")
+                @user.buy_stock(symbol.upcase, shares)
             when "3"
                 @user.get_symbols_portfolio
                 portfolio_menu
