@@ -4,8 +4,8 @@ require 'ruby2d'
 class Jeopardy
     
     def intro
-        # @think_song = Music.new('Jeopardy-theme-song.mp3')
-        # @think_song.play
+        @think_song = Music.new('Jeopardy-theme-song.mp3')
+        @think_song.play
         Views.banner_jeopardy
         Jeopardy.main
     end
@@ -60,9 +60,9 @@ class Jeopardy
     def self.select_category
         puts "\n" * 35
         Views.select_category_banner
-        new_category_questions = CategoryQuestion.get_category_questions
-        random_selection = CategoryQuestion.all.sample(6)
-        category_strings = random_selection.map{|cat| cat.category_name}
+        new_category_questions = Question.get_category_questions
+        random_selection = Question.all.sample(6)
+        category_strings = random_selection.map{|cat| cat.category}
         
         selection = PROMPT.select("Select a category", category_strings)
 
@@ -82,7 +82,6 @@ class Jeopardy
         end
         binding.pry
     end
-
 
 
 end
