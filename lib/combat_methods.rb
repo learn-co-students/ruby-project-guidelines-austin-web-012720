@@ -15,7 +15,10 @@ def cast_spell(player, spell, target)
     # boost spell damage based on player attributes, etc.
     puts "\n"
     PROMPT.say("You cast #{spell.name}!", color: :blue)
-    if spell.name == "Inspect"
+    if spell.name == "Tutorial"
+        print_tutorial(Tutorial.find_by(id: player.current_encounter))
+        player_turn(player, target) # so that the player doesn't lose thier turn for doing the tutorial
+    elsif spell.name == "Inspect"
         puts "\n"
         PROMPT.say("A #{target.name} is revealed!", color: :blue)
         target.stealth = false
@@ -36,7 +39,7 @@ def cast_spell(player, spell, target)
         puts "\n"
         PROMPT.ask("(Take a moment to read and press enter to continue when ready...)")
     elsif spell.name == "Heal"
-        player.health += spell.damage
+        player.heal(spell.damage)
         PROMPT.say("You feel slightly better. You now have #{player.health} hp.")
     else
         target.receive_spell(spell)
@@ -127,4 +130,8 @@ def combat_failure(player)
     "FAILED"
     puts "\n"
     sleep 0.5
+end
+
+def print_tutorial(tutorial_text)
+    # MAKE THIS PRETTY! 
 end

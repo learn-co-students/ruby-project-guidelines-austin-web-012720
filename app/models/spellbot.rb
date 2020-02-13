@@ -8,11 +8,20 @@ class Spellbot < ActiveRecord::Base
     def init 
         self.name ||= "Dalek"
         self.health ||= 10
+        self.max_health ||= self.health
         self.current_encounter ||= 1
     end
 
     def take_damage(damage)
         self.health -= damage
+    end
+
+    def heal(amount)
+        if self.health + amount > self.max_health
+            self.health = self.max_health
+        else
+            self.health += amount 
+        end
     end
 
     def change_encounter(encounter_num = self.current_encounter + 1)
