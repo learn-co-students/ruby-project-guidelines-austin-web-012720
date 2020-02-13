@@ -1,6 +1,5 @@
 require 'ruby2d'
-# require 'japi'
-
+require 'eventmachine'
 
 class Jeopardy
 
@@ -40,32 +39,35 @@ class Jeopardy
 
     def self.about
         Views.banner_jeopardy
-        print "Johnny Gilbert: ".light_yellow
-        puts"And now, here is the host of Jeopardy; Alex Trebek!"
-        puts "\n" * 5
-        sleep(4)
-        print "Trebek: ".light_green
-        puts "Thank you Johnny!"
-        puts "\n" * 5
-        sleep(2)
-        print "Trebek: ".light_green
-        puts "Jeopardy Lite will get you ready for your Jeopardy debut."
-        puts "\n" * 5
-        sleep(4)
-        print "Trebek: ".light_green
-        puts "Each incorrect response will be saved to your account for you to study."
-        puts "\n" * 5
-        sleep(4)
-        print "Trebek: ".light_green
-        puts "You will have one minute in Jeopardy and the Double Jeopardy rounds to answer questions."
-        puts "\n" * 5
-        sleep(5)
-        print "Trebek:".light_green
-        puts "On the Final Jeopardy round, you can place your wager and you will be given 30 seconds to guess the correct answer."
+        # print "Johnny Gilbert: ".light_yellow
+        # puts"And now, here is the host of Jeopardy; Alex Trebek!"
+        # puts "\n" * 5
+        # sleep(4)
+        # print "Trebek: ".light_green
+        # puts "Thank you Johnny!"
+        # puts "\n" * 5
+        # sleep(2)
+        # print "Trebek: ".light_green
+        # puts "Jeopardy Lite will get you ready for your Jeopardy debut."
+        # puts "\n" * 5
+        # sleep(4)
+        # print "Trebek: ".light_green
+        # puts "Each incorrect response will be saved to your account for you to study."
+        # puts "\n" * 5
+        # sleep(4)
+        # print "Trebek: ".light_green
+        # puts "You will have one minute in Jeopardy and the Double Jeopardy rounds to answer questions."
+        # puts "\n" * 5
+        # sleep(5)
+        # print "Trebek:".light_green
+        # puts "On the Final Jeopardy round, you can place your wager and you will be given 30 seconds to guess the correct answer."
         Views.banner_jeopardy
         ready = PROMPT.yes?("The time will start now. Are you ready?")
         if ready 
-            Jeopardy.select_category
+            Jeopardy.jeopardy_round
+            Jeopardy.double_jeopardy
+            Jeopardy.final_jeopardy
+            binding.pry
         else
             Jeopardy.main_menu
         end
@@ -279,6 +281,41 @@ class Jeopardy
         end
         # binding.pry
     end
+
+
+    def self.jeopardy_round
+           
+    end
+
+    # timer = Timer.new(:title => "Jeopardy Round")
+    # binding.pry
+    # until timer == 60 do
+    # timer.time("The block has finished executing!") do
+    #     Jeopardy.select_category
+    #   end
+    # end 
+
+    def self.double_jeopardy
+    end
+
+    def self.final_jeopardy
+    end
+
+    private
+
+    # def self.round_timer
+    #     t = Time.new(0)
+    #     countdown_time_in_seconds = 5
+    #     countdown_time_in_seconds.downto(0) do |seconds|
+    #     (t + seconds).strftime('%S')
+    #     sleep 1
+    #     end
+    # end
+
+    def self.display_round_info
+
+    end
+
 
 
 
