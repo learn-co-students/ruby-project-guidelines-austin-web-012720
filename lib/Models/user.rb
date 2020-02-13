@@ -26,9 +26,9 @@ class User < ActiveRecord::Base
     def get_symbols_portfolio
         output = get_portfolio_stocks
         
-        market_value = get_portfolio_stocks.sum do |stock, y|
-            stock.price
-        end 
+        # market_value = get_portfolio_stocks.sum do |stock, y|
+        #     stock.price
+        # end 
         
         stock_and_price = output.map do |x, y|
             [x.symbol, x.price]
@@ -60,6 +60,10 @@ class User < ActiveRecord::Base
             portfolio.each do |stock|
                 puts "#{stock[0]} $#{stock[1]}  #{stock[2]} shares"
             end 
+            market_value = portfolio.sum do |stock|
+                # binding.pry
+                stock[1] * stock[2]
+            end
             puts "\nYour Total Portfolio Market Value: $#{market_value}"
         end 
         symbols
