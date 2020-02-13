@@ -1,8 +1,25 @@
-def title_logo
+def intro_blink
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
+    sleep 0.2
+    system "clear"
+    puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
+    puts PASTEL.bright_green(FONT.write("|||>RUBY<||", letter_spacing: 2))
+    puts PASTEL.bright_green(FONT.write("|>WIZARD<|", letter_spacing: 2))
+    puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
+    sleep 0.2
+    system "clear"
+end
+
+def title_logo
+    4.times {intro_blink}
+    puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
+    puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
+    sleep 0.5
 end
 
 def game_intro
@@ -115,6 +132,8 @@ end
 def combat(player, challenge)
     # TODO: Singular challenge currently, will get multi-challenge support working later
     while(true)
+        sleep 0.5
+        PROMPT.say("You have #{player.health} hp left, and #{challenge.name} has #{challenge.health} hp left.", color: :magenta)
         player_turn(player, challenge)
     #   TODO: multi targets later 
     #   if not challenges.any?{ |challenge| challenge.health > 0}
@@ -172,18 +191,22 @@ end
 
 def combat_victory(player)
     # TODO: Make this pretty
+    system "clear"
     puts "\n"
     PROMPT.say("Your enemy lies broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
     puts "\n"
+    sleep 0.5
 end
 
 def combat_failure(player)
     # TODO: Make this pretty
+    system "clear"
     puts "\n"
     PROMPT.say("You lie broken and defeated. Your quest to become a mage is done.", color: :bright_magenta)
     "FAILED"
     puts "\n"
+    sleep 0.5
 end
 
 def enter_location(player)
