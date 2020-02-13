@@ -34,7 +34,7 @@ class CommandLineInterface < User
         if !@user
             puts "Wrong username, click enter to try again."
             input = PROMPT.ask("Or type c to create account")
-            if input.upcase == "C"
+            if input == "c" || input == "C"
                 create_account
             else 
                 log_in
@@ -49,9 +49,8 @@ class CommandLineInterface < User
         
             if @user.password == input_password
                 puts "\n" * 80
-                puts "Welcome #{@user.name}!"
                 choose_action
-            elsif input_password == "q"
+            elsif input_password == "q" || input_password == "Q"
                 account?
             else 
                 puts "Wrong password, try again!"
@@ -61,8 +60,10 @@ class CommandLineInterface < User
     end 
 
     def choose_action
-        puts puts "\n" * 80
+        puts "\n" 
+        puts "Welcome #{@user.name}!"
         puts "
+        
         MAIN MENU:
 
             1) Look Up a Stock
@@ -108,9 +109,10 @@ class CommandLineInterface < User
                 puts "\n" * 5
                 account?
             else 
-                
-                choose_action
+                puts "\n" * 50
                 puts "Not a valid number, try again."
+                choose_action
+               
         end 
         back_to_menu
     end 
