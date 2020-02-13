@@ -18,12 +18,12 @@ class Werewolf < Challenge
             {
                 damage: 1,
                 self_damage: 0,
-                description: "The #{self.name} howls at you filling you with dread." 
+                description: "The #{self.name} howls at you filling you with dread...but thankfully doing no actual damage." 
             },
             {
                 damage: 0,
                 self_damage: 0,
-                description: "The #{self.name} ignores you, grooming itself"
+                description: "The #{self.name} ignores you, grooming itself. What a prima-donna!"
             },
             {
                 damage: 2,
