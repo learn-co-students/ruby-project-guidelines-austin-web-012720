@@ -20,15 +20,15 @@ def cast_spell(player, spell, target)
         PROMPT.say("A #{target.name} is revealed!", color: :blue)
         target.stealth = false
         puts "\n"
-        PROMPT.say("Name: ", color: :red)
+        PROMPT.say("Name=> ", color: :red)
         PROMPT.say("#{target.name}", color: :green)
-        PROMPT.say("Description: ", color: :red)
+        PROMPT.say("Description=> ", color: :red)
         PROMPT.say("#{target.description}", color: :green)
-        PROMPT.say("Current Health: ", color: :red)
+        PROMPT.say("Current Health=> ", color: :red)
         PROMPT.say("#{target.health}", color: :green)
-        PROMPT.say("Armor: ", color: :red)
+        PROMPT.say("Armor=> ", color: :red)
         PROMPT.say("#{target.armor}", color: :green)
-        PROMPT.say("Element: ", color: :red)
+        PROMPT.say("Element=> ", color: :red)
         PROMPT.say("#{target.element}", color: :green)
         puts "\n"
         puts "\n"
@@ -55,7 +55,7 @@ def combat(player, challenge)
         if !challenge.stealth
             PROMPT.say("You have #{player.health} hp left, and #{challenge.name} has #{challenge.health} hp left.", color: :magenta)
         else
-            PROMPT.say("You have #{player.health} hp left, and can't see anyone to attack?", color: :magenta)   
+            PROMPT.say("You have #{player.health} hp left, and can't see anyone to attack. That can't be right...", color: :magenta)   
         end 
         player_turn(player, challenge)
     #   TODO: multi targets later 
@@ -113,7 +113,7 @@ def combat_victory(player)
     # TODO: Make this pretty
     system "clear"
     puts "\n"
-    PROMPT.say("Your enemy lies broken and defeated before you. What awaits you in your next challenge?", color: :bright_green)
+    PROMPT.say("Your enemy lies broken and defeated before you. You walk gloatingly over it's ruined corpse, mocking it as you pass. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
     puts "\n"
     sleep 0.5
@@ -128,3 +128,5 @@ def combat_failure(player)
     puts "\n"
     sleep 0.5
 end
+
+
