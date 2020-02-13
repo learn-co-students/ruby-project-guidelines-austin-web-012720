@@ -7,8 +7,9 @@ class Jeopardy
     @@score = 0
     
         def intro
-        @think_song = Music.new('Jeopardy-theme-song.mp3')
-        @think_song.play
+        # @think_song = Music.new('Jeopardy-theme-song.mp3')
+        # @think_song.play
+        binding.pry
         Views.banner_jeopardy
         Jeopardy.greeting
     end
@@ -19,8 +20,7 @@ class Jeopardy
             @@current_user = User.create_user
             Jeopardy.about
         else
-            test = Jeopardy.login
-            # should be returning the @current user
+            Jeopardy.login
             Jeopardy.main_menu
         end
     end
@@ -33,8 +33,7 @@ class Jeopardy
         when "Play"
             Jeopardy.about
         when "Study"
-            UserQuestion.study(@@current_user)
-            
+            UserQuestion.study(@@current_user) 
         else
             Jeopardy.greeting
         end
@@ -43,20 +42,27 @@ class Jeopardy
 
     def self.about
         Views.banner_jeopardy
-        print "Johnny Gilbert:".light_yellow
+        print "Johnny Gilbert: ".light_yellow
         puts"And now, here is the host of Jeopardy; Alex Trebek!"
         puts "\n" * 5
         sleep(4)
-        print "Trebek:".light_green
+        print "Trebek: ".light_green
+        puts "Thank you Johnny!"
+        puts "\n" * 5
+        sleep(2)
+        print "Trebek: ".light_green
         puts "Jeopardy Lite will get you ready for your Jeopardy debut."
         puts "\n" * 5
         sleep(4)
+        print "Trebek: ".light_green
         puts "Each incorrect response will be saved to your account for you to study."
         puts "\n" * 5
         sleep(4)
+        print "Trebek: ".light_green
         puts "You will have one minute in Jeopardy and the Double Jeopardy rounds to answer questions."
         puts "\n" * 5
         sleep(5)
+        print "Trebek:".light_green
         puts "On the Final Jeopardy round, you can place your wager and you will be given 30 seconds to guess the correct answer."
         Views.banner_jeopardy
         ready = PROMPT.yes?("The time will start now. Are you ready?")
@@ -110,15 +116,16 @@ class Jeopardy
         puts "\n" * 35
         Views.select_category_banner
         random_selection = Question.all.sample(6)
-        binding.pry
-        #       check_variable = Quesion.check_enough_questions(random_selection)
-        #need to check if their are enough questions
+       
         category_strings = random_selection.map{|cat| cat.category}
+        #iterate over category strings and remove all html tags
+        # RemoveTags.remove_html_tags(category_strings)
+        # ActionView::Base.full_sanitizer.sanitize(@string)
+
         selection = PROMPT.select("Select a category", category_strings)
         questions = Question.all.select {|question| question.category == selection}
         case selection
         when category_strings[0]
-            # binding.pry
             value = Views.select_value.to_i
             if questions.find {|q| q.value == value} == nil
                 user_question = questions.first
@@ -131,7 +138,6 @@ class Jeopardy
                 print "Trebek:".light_green
                 puts "That is correct"
                 puts "Your score: #{@@score}"
-                # binding.pry
              else
                 @@score -= value 
                 study_question = UserQuestion.new(user: @@current_user, question: user_question)
@@ -141,14 +147,11 @@ class Jeopardy
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
                 puts "Your score: #{@@score}"
-                # binding.pry
-
              end
-            # binding.pry
+            
         when category_strings[1]
-
-
             value = Views.select_value.to_i
+
             if questions.find {|q| q.value == value} == nil
                 user_question = questions.first
             else
@@ -160,15 +163,14 @@ class Jeopardy
                 print "Trebek:".light_green
                 puts "That is correct"
                 puts "Your score: #{@@score}"
-                # binding.pry
              else
                 @@score -= value 
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
                 puts "Your score: #{@@score}"
-                # binding.pry
-
              end        
         when category_strings[2]
 
@@ -184,15 +186,14 @@ class Jeopardy
                 print "Trebek:".light_green
                 puts "That is correct"
                 puts "Your score: #{@@score}"
-                # binding.pry
              else
-                @@score -= value 
+                @@score -= value
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save 
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
                 puts "Your score: #{@@score}"
-                # binding.pry
-
              end
         when category_strings[3]
             value = Views.select_value.to_i
@@ -210,6 +211,8 @@ class Jeopardy
                 # binding.pry
              else
                 @@score -= value 
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
@@ -233,12 +236,12 @@ class Jeopardy
                 # binding.pry
              else
                 @@score -= value 
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
                 puts "Your score: #{@@score}"
-                # binding.pry
-
              end
         else category_strings[5]
 
@@ -254,21 +257,15 @@ class Jeopardy
                 print "Trebek:".light_green
                 puts "That is correct"
                 puts "Your score: #{@@score}"
-                # binding.pry
              else
                 @@score -= value 
+                study_question = UserQuestion.new(user: @@current_user, question: user_question)
+                study_question.save
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
                 puts "Your score: #{@@score}"
-                # binding.pry
-
              end
         end
-        # binding.pry
     end
-
-
-
-
 end
