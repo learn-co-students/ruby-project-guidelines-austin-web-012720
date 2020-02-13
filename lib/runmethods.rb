@@ -3,18 +3,18 @@ def intro_blink
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
-    sleep 0.2
+    sleep 0.4
     system "clear"
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
     puts PASTEL.bright_green(FONT.write("|||>RUBY<||", letter_spacing: 2))
     puts PASTEL.bright_green(FONT.write("|>WIZARD<|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
-    sleep 0.2
+    sleep 0.4
     system "clear"
 end
 
 def title_logo
-    4.times {intro_blink}
+    2.times {intro_blink}
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
@@ -28,15 +28,19 @@ def game_intro
     PROMPT.say("RUBY WIZARD ", color: :bright_red)
     PROMPT.say("!", color: :green) 
     puts "\n"
-    PROMPT.yes?('Is this your first time playing?', help_color: :green, active_color: :green)
+    x = PROMPT.yes?('Is this your first time playing? (type "y" for yes)', help_color: :green, active_color: :green)
     puts "\n" * 2
-    PROMPT.say("Who cares! We don't have enough content for that to matter right now!", color: :green)
+    if x 
+        PROMPT.say("Thanks for giving this a shot! Despite what everyone else says about you, we think you're pretty cool.", color: :green)
+    else
+        PROMPT.say("Who cares! We don't have enough content for that to matter right now!", color: :green)
+    end 
     puts "\n" * 2
-    sleep(1)
-    PROMPT.say("Ruby wizard will be an educational text-based game focused on Ruby as a programming language", color: :bright_red)
-    PROMPT.say("Please enjoy what will hopefully be a pleasant experience, and apologies if you break the code...", color: :bright_red)
+    sleep(2)
+    PROMPT.say("Ruby wizard is an educational text-based game focused on Ruby as a programming language", color: :bright_red)
+    PROMPT.say("Please enjoy our alpha version! If you have any feedback or criticism, please note that we don't care.", color: :bright_red)
     puts "\n"
-    sleep(3)
+    sleep(4)
     PROMPT.say(". . . . . . . . . .", color: :red)
     sleep(1)
     puts "\n"
@@ -46,12 +50,16 @@ def game_intro
     PROMPT.say(". . . . . . . . . .", color: :red)
     sleep(1)
     puts "\n"
-    PROMPT.say("...but you probably deserve it.", color: :bright_red)
+    PROMPT.say(". . .just kidding, we love feedback! Email notes to gotyouagain@wedontcare.com.", color: :bright_red)
     puts "\n" * 2
-    PROMPT.yes?('Are you ready to start?', help_color: :green, active_color: :green)
     sleep 1.2
+    y = PROMPT.yes?('Are you ready to start?', help_color: :green, active_color: :green)
     puts "\n" * 2
-    PROMPT.say("Doesn't matter, let's go!", color: :bright_red)
+    if y 
+        PROMPT.say("Ha! That's what *you* think! Let's see if we can humble some of that hubris...", color: :bright_red)
+    else
+        PROMPT.say("Doesn't matter, let's go!", color: :bright_red) 
+    end   
     puts "\n" * 2
     sleep(2)
 
