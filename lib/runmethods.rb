@@ -141,7 +141,11 @@ def combat(player, challenge)
     # TODO: Singular challenge currently, will get multi-challenge support working later
     while(true)
         sleep 0.5
-        PROMPT.say("You have #{player.health} hp left, and #{challenge.name} has #{challenge.health} hp left.", color: :magenta)
+        if !challenge.stealth
+            PROMPT.say("You have #{player.health} hp left, and #{challenge.name} has #{challenge.health} hp left.", color: :magenta)
+        else
+            PROMPT.say("You have #{player.health} hp left, and can't see anyone to attack?", color: :magenta)   
+        end 
         player_turn(player, challenge)
     #   TODO: multi targets later 
     #   if not challenges.any?{ |challenge| challenge.health > 0}
@@ -247,7 +251,9 @@ def enter_location(player)
             PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
             puts "\n"
+            sleep 1
             PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
+            sleep 0.5
         else
             puts "\n"
             PROMPT.say("You can't see anything...that can't be right, maybe try inspecting?", color: :bright_red)
