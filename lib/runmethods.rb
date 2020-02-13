@@ -89,7 +89,7 @@ def spell_prompt
     PROMPT.say("     It's your turn now!", color: :green)
     PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :red)
     puts "\n"
-    spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
+    spell = PROMPT.select("Pick which spell to cast", Spell.all.map{|spell| spell.name}, active_color: :bright_red, per_page: 6)
     
     spell
 end
@@ -127,10 +127,13 @@ def cast_spell(player, spell, target)
         PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :bright_cyan)
         puts "\n"
         PROMPT.ask("(Take a moment to read and press enter to continue when ready...)")
+    elsif spell.name == "Heal"
+        player.health += spell.damage
+        PROMPT.say("You feel slightly better. You now have #{player.health}")
     else
         target.receive_spell(spell)
         if !target.stealth
-            PROMPT.say("The #{target.name} has #{target.health}hp left!", color: :blue)
+            PROMPT.say("The #{target.name} has #{target.health} health left!", color: :blue)
         else
             PROMPT.say("You can't see anything at all. I hope you aren't taking damage!", color: :blue)
         end
@@ -179,7 +182,6 @@ def player_turn(player, target)
 end
 
 def challenge_turn(player, challenge)
-    player.take_damage(challenge.strength)
     puts "\n"
     if !challenge.stealth
         PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
@@ -191,10 +193,17 @@ def challenge_turn(player, challenge)
         PROMPT.say("xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", color: :green)
     end
     puts "\n"
-    if !challenge.stealth
-        PROMPT.say("The #{challenge.name} attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
+    
+    player.take_damage(challenge.strength)
+    if challenge.visible?
+        if challenge.stealth
+            PROMPT.say("Nothing happened. You still feel there's something watching you.", color: :blue)
+        else
+            PROMPT.say("Something attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left. You should figure out what is in here!", color: :blue)
+        end
     else
-        PROMPT.say("Something attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left. You should figure out what is in here!", color: :blue)
+        # PROMPT.say("#{attack[:description]}", color: :blue)
+        PROMPT.say("You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
     end
     puts "\n"
     player

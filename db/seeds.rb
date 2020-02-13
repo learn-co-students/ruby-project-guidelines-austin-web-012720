@@ -22,3 +22,5 @@ tutorial4 = Tutorial.create(content: "Hahahaha, w-ERROR-wolf...oh man the progra
 manabolt = Spell.create(name: "Manabolt", damage: 2, element: nil)
 frostbolt = Spell.create(name: "Frostbolt", damage: 2, element: "water")
 inspect = Spell.create(name: "Inspect", damage: 0, element: nil)
+heal = Spell.create(name: "Heal", damage: 3, element: nil)
+tutorial = Spell.create(name: "Tutorial", damage: 0, element: nil)

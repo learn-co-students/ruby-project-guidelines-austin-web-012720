@@ -48,4 +48,9 @@ ActiveRecord::Schema.define(version: 20200213151048) do
     t.integer "spellbot_id"
   end
 
+  create_table "tutorials", force: :cascade do |t|
+    t.text    "content"
+    t.integer "encounter_id"
+  end
+
 end
