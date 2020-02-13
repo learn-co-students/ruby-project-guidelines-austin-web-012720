@@ -1,5 +1,6 @@
 require 'ruby2d'
 # require 'japi'
+require 'eventmachine'
 
 
 class Jeopardy
@@ -9,7 +10,6 @@ class Jeopardy
         def intro
         # @think_song = Music.new('Jeopardy-theme-song.mp3')
         # @think_song.play
-        binding.pry
         Views.banner_jeopardy
         Jeopardy.greeting
     end
@@ -66,8 +66,8 @@ class Jeopardy
         puts "On the Final Jeopardy round, you can place your wager and you will be given 30 seconds to guess the correct answer."
         Views.banner_jeopardy
         ready = PROMPT.yes?("The time will start now. Are you ready?")
-        if ready 
-            Jeopardy.select_category
+        if ready
+            Jeopardy.jeopardy_round 
         else
             Jeopardy.main_menu
         end
@@ -142,7 +142,7 @@ class Jeopardy
                 @@score -= value 
                 study_question = UserQuestion.new(user: @@current_user, question: user_question)
                 study_question.save
-                binding.pry
+                
                 print "Trebek:".light_green
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
@@ -208,7 +208,6 @@ class Jeopardy
                 print "Trebek:".light_green
                 puts "That is correct"
                 puts "Your score: #{@@score}"
-                # binding.pry
              else
                 @@score -= value 
                 study_question = UserQuestion.new(user: @@current_user, question: user_question)
@@ -217,8 +216,6 @@ class Jeopardy
                 print "That is incorrect.".light_red
                 puts "The correct response is #{user_question.answer}. "
                 puts "Your score: #{@@score}"
-                # binding.pry
-
              end
         when category_strings[4]
             value = Views.select_value.to_i
@@ -267,5 +264,50 @@ class Jeopardy
                 puts "Your score: #{@@score}"
              end
         end
+    end
+
+    def self.jeopardy_round
+      Jeopardy.timer
+      Jeopardy.display_info
+
+    end
+
+    def self.timer
+        EM.run do
+          EM.add_timer(10) do
+            puts "The time is up."
+            EM.stop_event_loop
+          end
+        
+          EM.add_periodic_timer(1) do
+            Jeopardy.select_category
+          end
+        end
+    
+    end
+
+    def self.double_jeopardy
+      Jeopardy.timer
+    end
+
+    def self.final_jeopardy
+    end
+    
+    private
+
+    def self.display_info
+      puts "\n" * 35
+      Views.banner_jeopardy  
+      puts "Your score is #{@@score}."
+      selection = PROMPT.select("Are you ready for Double Jeopardy?", %w(Yes Exit))
+      binding.pry
+      case selection
+      when "Yes"
+        self.double_jeopardy  
+      else "Exit"
+          Views.banner_exit
+          sleep(3)
+        exit                  
+      end      
     end
 end
