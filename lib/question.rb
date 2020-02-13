@@ -16,7 +16,6 @@ class Question < ActiveRecord::Base
           new_question.value = question["value"]
         end
         new_question.category = question["category"]["title"]
-        #Some of the values are nil so we need to assign an optional value
         new_question.save
       end 
     end
@@ -29,17 +28,4 @@ class Question < ActiveRecord::Base
         end
       end
     end
-
-  
-    def self.check_enough_questions(question_sample)
-      categories_to_check = question_sample.map {|question| question.category}
-      categories_to_check.map do |category_string|
-        if Question.where(category: category_string).length > 5
-          
-        else
-          
-        end
-      end
-    end
-
 end
