@@ -23,21 +23,31 @@ def cast_spell(player, spell, target)
         PROMPT.say("#{target.name} is revealed!", color: :blue)
         target.stealth = false
         puts "\n"
-        PROMPT.say("Name=> ", color: :red)
+        PROMPT.say(".xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.", color: :cyan)
+        PROMPT.say("Name=>             ", color: :red)
         PROMPT.say("#{target.name}", color: :green)
-        PROMPT.say("Description=> ", color: :red)
+        PROMPT.say("- - - - - - - - - -", color: :cyan)
+        PROMPT.say("Description=>      ", color: :red)
         PROMPT.say("#{target.description}", color: :green)
-        PROMPT.say("Current Health=> ", color: :red)
+        PROMPT.say("- - - - - - - - - -", color: :cyan)
+        PROMPT.say("Current Health=>   ", color: :red)
         PROMPT.say("#{target.health}", color: :green)
-        PROMPT.say("Armor=> ", color: :red)
+        PROMPT.say("- - - - - - - - - -", color: :cyan)
+        PROMPT.say("Element=>          ", color: :red)
+        if target.element
+            PROMPT.say("#{target.element}", color: :green)
+        else
+            PROMPT.say("none", color: :green)    
+        end
+        PROMPT.say("- - - - - - - - - -", color: :cyan)
+        PROMPT.say("Armor=>            ", color: :red)
         PROMPT.say("#{target.armor}", color: :green)
-        PROMPT.say("Element=> ", color: :red)
-        PROMPT.say("#{target.element}", color: :green)
+        PROMPT.say("`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`", color: :cyan)
         puts "\n"
         puts "\n"
         PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :bright_cyan)
         puts "\n"
-        PROMPT.ask("(Take a moment to read and press enter to continue when ready...)")
+        PROMPT.ask("Mash your keyboard impatiently to get back to combat. Oh, you probably were already doing that.")
     elsif spell.name == "Heal"
         player.heal(spell.damage)
         PROMPT.say("You feel slightly better. You now have #{player.health} hp.")
@@ -116,7 +126,7 @@ def combat_victory(player)
     # TODO: Make this pretty
     system "clear"
     puts "\n"
-    PROMPT.say("Your enemy lies broken and defeated before you. You walk gloatingly over it's ruined corpse, mocking it as you pass. What awaits you in your next challenge?", color: :bright_green)
+    PROMPT.say("Your enemy lies broken and defeated before you. You walk gloatingly over the mangled corpse, mocking it as you pass. What awaits you in your next challenge?", color: :bright_green)
     "VICTORY"
     puts "\n"
     sleep 0.5
@@ -150,4 +160,5 @@ def tutorial_box(encounter_id)
 
     print box
 
+    PROMPT.keypress("Press any button to get back to killin' stuff!")
 end
