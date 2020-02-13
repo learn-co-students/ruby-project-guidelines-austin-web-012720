@@ -10,12 +10,34 @@ def spell_prompt
     spell
 end
 
+def inspect_box(target)
+    inspect_box = TTY::Box.frame(width: 100, align: :left, title: {top_left: "  Inspect  "}, 
+        style: {
+            fg: :bright_white,
+            bg: :black,
+            border: {
+            fg: :bright_yellow,
+            bg: :black
+            }
+        }) do #first quote needs to be on individual line for formatting in TTY-box gem to indent line off box edge
+        "
+        Name => #{target.name}
+        Description => #{target.description}
+        Starting Health => #{target.health}
+        Element => #{target.element}
+        Armor => #{target.armor}"
+    end
+
+    print inspect_box
+end
+
 def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
     puts "\n"
     PROMPT.say("You cast #{spell.name}!", color: :blue)
     if spell.name == "Tutorial"
+        puts "\n"
         tutorial_box(player.current_encounter)
         player_turn(player, target) # so that the player doesn't lose thier turn for doing the tutorial
     elsif spell.name == "Inspect"
@@ -23,36 +45,20 @@ def cast_spell(player, spell, target)
         PROMPT.say("#{target.name} is revealed!", color: :blue)
         target.stealth = false
         puts "\n"
-        PROMPT.say(".xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.xVx.", color: :cyan)
-        PROMPT.say("Name=>             ", color: :red)
-        PROMPT.say("#{target.name}", color: :green)
-        PROMPT.say("- - - - - - - - - -", color: :cyan)
-        PROMPT.say("Description=>      ", color: :red)
-        PROMPT.say("#{target.description}", color: :green)
-        PROMPT.say("- - - - - - - - - -", color: :cyan)
-        PROMPT.say("Current Health=>   ", color: :red)
-        PROMPT.say("#{target.health}", color: :green)
-        PROMPT.say("- - - - - - - - - -", color: :cyan)
-        PROMPT.say("Element=>          ", color: :red)
-        if target.element
-            PROMPT.say("#{target.element}", color: :green)
-        else
-            PROMPT.say("none", color: :green)    
-        end
-        PROMPT.say("- - - - - - - - - -", color: :cyan)
-        PROMPT.say("Armor=>            ", color: :red)
-        PROMPT.say("#{target.armor}", color: :green)
-        PROMPT.say("`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`^~^`", color: :cyan)
+        inspect_box(target)
         puts "\n"
         puts "\n"
-        PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :bright_cyan)
+        PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :blue)
         puts "\n"
         PROMPT.ask("Mash your keyboard impatiently to get back to combat. Oh, you probably were already doing that.")
     elsif spell.name == "Heal"
         player.heal(spell.damage)
+        puts "\n"
         PROMPT.say("You feel slightly better. You now have #{player.health} hp.")
+        puts "\n"
     else
         target.receive_spell(spell)
+        puts "\n"
         if !target.stealth
             PROMPT.say("The #{target.name} has #{target.health} hp left!", color: :blue)
         else
@@ -162,3 +168,4 @@ def tutorial_box(encounter_id)
 
     PROMPT.keypress("Press any button to get back to killin' stuff!")
 end
+
