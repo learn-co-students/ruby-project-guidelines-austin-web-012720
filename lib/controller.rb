@@ -286,11 +286,40 @@ class Jeopardy
     
     end
 
+
+    def self.final_timer
+        wrong_answers = Question.all.find_by(category: "#{@@final_clue.category}")
+        binding.pry
+        EM.run do
+          EM.add_timer(30) do
+            puts "The time is up."
+            EM.stop_event_loop
+          end
+        
+          EM.add_periodic_timer(1) do
+            puts "#{@@final_clue.question}"
+            final_answer = PROMPT.select("#{}")
+          end
+        end
+    
+    end
+
     def self.double_jeopardy
       Jeopardy.timer
+      Jeopardy.display_info_final_jeopardy
     end
 
     def self.final_jeopardy
+      @@final_clue = Question.all.sample
+      puts "You will have 30 seconds to answer the Final Jeopardy question."
+      puts "The category is #{@@final_clue.category}"  
+      wager = PROMPT.ask("How much would you like to wager?", required: true).to_i
+      binding.pry
+      Jeopardy.final_timer
+      #the final_timer method displays the question for 30 seconds
+
+      Jeopardy.display_info_end_of_game
+      final_answer = PROMPT.select("#{}")
     end
     
     private
@@ -300,7 +329,6 @@ class Jeopardy
       Views.banner_jeopardy  
       puts "Your score is #{@@score}."
       selection = PROMPT.select("Are you ready for Double Jeopardy?", %w(Yes Exit))
-      binding.pry
       case selection
       when "Yes"
         self.double_jeopardy  
@@ -309,5 +337,38 @@ class Jeopardy
           sleep(3)
         exit                  
       end      
+    end
+
+    def self.display_info_final_jeopardy
+        puts "\n" * 35
+        Views.banner_jeopardy  
+        puts "Your score is #{@@score}."
+        #screen out players whose score is < 1
+        selection = PROMPT.select("Are you ready for the Final Round?", %w(Yes Exit))
+        case selection
+        when "Yes"
+          self.final_jeopardy  
+        else "Exit"
+            Views.banner_exit
+            sleep(3)
+          exit                  
+        end         
+    end
+
+    def self.display_info_end_of_game
+        puts "\n" * 35
+        Views.banner_jeopardy
+
+        puts "Your score is #{@@score}."
+        #fix code after this
+        selection = PROMPT.select("Are you ready for the Final Round?", %w(Yes Exit))
+        case selection
+        when "Yes"
+          self.final_jeopardy  
+        else "Exit"
+            Views.banner_exit
+            sleep(3)
+          exit                  
+        end         
     end
 end
