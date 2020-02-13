@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200213173251) do
+ActiveRecord::Schema.define(version: 20200213151048) do
 
   create_table "challenges", force: :cascade do |t|
     t.string  "name"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20200213173251) do
     t.integer "armor"
     t.integer "strength"
     t.boolean "stealth"
+    t.string  "type"
   end
 
   create_table "encounters", force: :cascade do |t|
@@ -37,8 +38,8 @@ ActiveRecord::Schema.define(version: 20200213173251) do
   create_table "spellbots", force: :cascade do |t|
     t.string  "name"
     t.integer "health"
-    t.integer "current_encounter"
     t.integer "max_health"
+    t.integer "current_encounter"
     t.boolean "first_time"
   end
 

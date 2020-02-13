@@ -24,3 +24,8 @@ frostbolt = Spell.create(name: "Frostbolt", damage: 2, element: "water")
 inspect = Spell.create(name: "Inspect", damage: 0, element: nil)
 heal = Spell.create(name: "Heal", damage: 3, element: nil)
 tutorial = Spell.create(name: "Tutorial", damage: 0, element: nil)
+
+##players##
+Spellbot.create(name: "player_1", current_encounter: 1, first_time: true)
+Spellbot.create(name: "player_2", current_encounter: 1, first_time: false)
+Spellbot.create(name: "player_3", current_encounter: 2, first_time: false)

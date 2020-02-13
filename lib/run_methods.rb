@@ -28,13 +28,11 @@ def game_intro
     PROMPT.say("RUBY WIZARD ", color: :bright_red)
     PROMPT.say("!", color: :green) 
     puts "\n"
-    x = PROMPT.yes?('Is this your first time playing? (Yes here will auto-trigger the tutorial on every level)', help_color: :green, active_color: :green)
+    first_time = PROMPT.yes?('Is this your first time playing? (Yes here will auto-trigger the tutorial on every level)', help_color: :green, active_color: :green)
     puts "\n" * 2
-    if x
-        Spellbot.create(first_time: true, current_encounter: 1)
+    if first_time
         PROMPT.say("Thanks for giving this a shot! Despite what everyone else says about you, we think you're pretty cool.", color: :green)
     else
-        Spellbot.create(first_time: false, current_encounter: 1)
         PROMPT.say("You came back! Wonderful! We hate you slightly less now.", color: :green)
     end 
     puts "\n" * 2
@@ -64,7 +62,7 @@ def game_intro
     end   
     puts "\n" * 2
     sleep(2)
-
+    first_time
 end
 
 def end_screen
@@ -135,16 +133,7 @@ def reset_database
     Spellbot.delete_all
 end
 
-def game_startup
-    title_logo
-    puts "\n" * 2
-    game_intro
-    # reset_database
-    player = Spellbot.last
-    name = PROMPT.ask("What is your name?")
-    player.name = name
-    player.save
-    # TODO: change the number of challenges
+def game_loop(player)
     while player.current_encounter <= Encounter.last.id
         enter_location(player)
         encounter = Encounter.find_by(id: player.current_encounter)
@@ -165,4 +154,84 @@ def game_startup
     else
         end_screen
     end
+end
+
+def new_game
+    puts "\n" * 2
+    first_time = game_intro
+    name = PROMPT.ask("What is your name?")
+    player = Spellbot.create(name: name, first_time: first_time)
+    player.name = name
+    player.save
+    game_loop(player)
+end
+
+def show_stored_games
+    if Spellbot.all.count == 0
+        yn = PROMPT.yes?("You have no games saved! Start a new one!")
+        if yn
+            new_game
+        end
+        return 0
+    end
+    system "clear"
+    Spellbot.all.each{|sb| print_spellbot(sb)}
+    id = PROMPT.ask("Enter game number to continue") do |q|
+        q.validate(/\d/)
+        q.messages[:valid?] = 'Invalid entry. Try again.'
+    end
+end
+
+def load_game
+    spellbot_id = show_stored_games
+    if spellbot_id != 0
+        spellbot = Spellbot.find_by(id: spellbot_id.to_i)
+        game_loop(spellbot)
+    end
+end
+
+def delete_game
+    spellbot_id = show_stored_games
+    if spellbot_id != 0
+        Spellbot.delete(spellbot_id.to_i)
+    end
+end
+
+def main_menu
+    loop do
+        system "clear"
+        choice = PROMPT.select("Welcome to Ruby Wizard!", %w(new_game load_game delete_game quit), active_color: :bright_red)
+        if choice == "new_game"
+            new_game
+        elsif choice == "load_game"
+            load_game
+        elsif choice == "delete_game"
+            delete_game
+        else
+            break;
+        end
+    end
+end
+
+def game_startup
+    title_logo
+    main_menu
+end
+
+def print_spellbot(spellbot)
+    inspect_box = TTY::Box.frame(width: 100, align: :left, title: {top_left: "  #{spellbot.id}. #{spellbot.name}  "}, 
+        style: {
+            fg: :bright_white,
+            bg: :black,
+            border: {
+            fg: :bright_yellow,
+            bg: :black
+            }
+        }) do #first quote needs to be on individual line for formatting in TTY-box gem to indent line off box edge
+        "
+        Health => #{spellbot.health}
+        Location => #{Location.find_by(id: spellbot.current_encounter).name}"
+    end
+
+    print inspect_box
 end
