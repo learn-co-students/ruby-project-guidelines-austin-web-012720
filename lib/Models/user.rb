@@ -26,14 +26,10 @@ class User < ActiveRecord::Base
     def get_symbols_portfolio
         output = get_portfolio_stocks
         
-        # market_value = get_portfolio_stocks.sum do |stock, y|
-        #     stock.price
-        # end 
         
         stock_and_price = output.map do |x, y|
             [x.symbol, x.price]
         end 
-        # binding.pry
 
         shares_array = output.map do |stock, x|
             get_stock_shares(stock.id)
@@ -44,10 +40,15 @@ class User < ActiveRecord::Base
             stock.push(shares_array[i])
             i = i + 1
         end 
+        array = portfolio
+        j = 0
+        array.each do |stock|
+            # binding.pry
+            portfolio[j].push(stock[1] * stock[2])
+            j += 1
+        end
+        
 
-
-
-        # binding.pry
         symbols = output.map do |x, y|
             "#{x.symbol}"
        end 
@@ -58,7 +59,7 @@ class User < ActiveRecord::Base
             puts "\n" * 10
             puts "Your porfolio has these stocks:"
             portfolio.each do |stock|
-                puts "#{stock[0]} $#{stock[1]}  #{stock[2]} shares"
+                puts "#{stock[0]} $#{stock[1]}  #{stock[2]} shares, total value: $#{stock[3]} "
             end 
             market_value = portfolio.sum do |stock|
                 # binding.pry
