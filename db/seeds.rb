@@ -11,12 +11,12 @@ tutorial2 = Tutorial.create(content: "Hey look, you murdered a bush! Good job. M
 wolf = Werewolf.create
 jungle = Location.create(name: "Jargon Jungle", description: "As you traverse through the jungle you can feel the hot, foreboding breath of something...evil. However, no matter where you look you can’t find the source. Things are heating up, work fast")
 encounter3 = Encounter.create(challenge_id: 3, location_id: 3)
-tutorial3 = Tutorial.create(content: "Good job! And I would apologize about the terrible pun in that last challenge’s name, but I won’t because it was hilarious. In the previous encounter the bat had an attribute called “stealth”, and we set up a series of code so that when the player casts Inspect it switches the monster’s stealth attribute to visible, allowing players to target them. For this encounter try to inspect and look at the “Element” attribute. The game has been designed to recognize the element of each spell and monster when they interact and adjust damage accordingly. Experiment with trying different spells, this monster we also set the damage dealt to 0 so you can’t lose. ", encounter_id: 3)
+tutorial3 = Tutorial.create(content: "Good job! And I would apologize about the terrible pun in that last challenge’s name, but I won’t because it was hilarious. In the previous encounter the bat had an attribute called “stealth”, and we set up a series of code so that when the player casts Inspect it switches the monster’s stealth attribute to visible, allowing players to target them. For this encounter try to inspect and look at the “Element” attribute. The game has been designed to recognize the element of each spell and monster when they interact and adjust damage accordingly. Experiment with trying different spells, but keep an eye on your health and don't let it hit 0!", encounter_id: 3)
 
 monkey = CodeMonkey.create
 cabin = Location.create(name: "Google's Private Cabin", description: "Whenever their top employees are behind schedule Google sends them to this isolated cabin in the woods. The raw, unfiltered magic has slowly changed them into something new and terrifying…")
 encounter4 = Encounter.create(challenge_id: 4, location_id: 4)
-tutorial4 = Tutorial.create(content: "Hahahaha, w-ERROR-wolf...oh man the programmer for this game is HILARIOUS! Anywho, this last round utilizes concepts from every previous level and the enemy does deal damage, so it IS possible to lose here! Be strong and code on!", encounter_id: 4)
+tutorial4 = Tutorial.create(content: "Hahahaha, w-ERROR-wolf...oh man the programmer for this game is HILARIOUS! Anywho, this last round utilizes concepts from every previous level and the enemy does deal damage, so it IS possible to lose here! Also take note the Code Monkey has armor, meaning all your attacks damage will be reduced by 1. Be strong and code on!", encounter_id: 4)
 
 ##spells##
 manabolt = Spell.create(name: "Manabolt", damage: 2, element: nil)
