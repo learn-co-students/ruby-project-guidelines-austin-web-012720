@@ -100,14 +100,18 @@ class User < ActiveRecord::Base
             "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
             "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
         }
-        puts "\n" * 40
-        puts "#{symbol} earnings for the last 4 quarters:\n
-        "
-        puts "  EPS |  DATE"
-        puts "$#{response.body[0]["actual"]} | #{response.body[0]["period"]}"
-        puts "$#{response.body[1]["actual"]} | #{response.body[1]["period"]}"
-        puts "$#{response.body[2]["actual"]} | #{response.body[2]["period"]}"
-        puts "$#{response.body[3]["actual"]} | #{response.body[3]["period"]}"
+        if response.body != []
+            puts "\n" * 40
+            puts "#{symbol} earnings for the last 4 quarters:\n
+            "
+            puts "  EPS |  DATE"
+            puts "$#{response.body[0]["actual"]} | #{response.body[0]["period"]}"
+            puts "$#{response.body[1]["actual"]} | #{response.body[1]["period"]}"
+            puts "$#{response.body[2]["actual"]} | #{response.body[2]["period"]}"
+            puts "$#{response.body[3]["actual"]} | #{response.body[3]["period"]}"
+        else 
+            puts "Invalid symbol, try again."
+        end 
         
         
     end 
@@ -118,14 +122,18 @@ class User < ActiveRecord::Base
             "X-RapidAPI-Host" => "finnhub-realtime-stock-price.p.rapidapi.com",
             "X-RapidAPI-Key" => "dafb7f16bbmsh88ffcdd851dbd91p135ccbjsn8936bcff69ee"
         }
-        puts "\n" * 40
-        puts "#{symbol} analyst recommendations for this month:
-        "
-        puts "BUY: #{response.body[0]["buy"]}"
-        puts "HOLD: #{response.body[0]["hold"]}"
-        puts "SELL: #{response.body[0]["sell"]}"
-        puts "STRONG BUY: #{response.body[0]["strongBuy"]}"
-        puts "STRONG SELL: #{response.body[0]["strongSell"]}"
+        if response.body != []
+            puts "\n" * 40
+            puts "#{symbol} analyst recommendations for this month:
+            "
+            puts "BUY: #{response.body[0]["buy"]}"
+            puts "HOLD: #{response.body[0]["hold"]}"
+            puts "SELL: #{response.body[0]["sell"]}"
+            puts "STRONG BUY: #{response.body[0]["strongBuy"]}"
+            puts "STRONG SELL: #{response.body[0]["strongSell"]}"
+        else 
+            puts "Invalid symbol, try again."
+        end 
         
         # binding.pry
 
