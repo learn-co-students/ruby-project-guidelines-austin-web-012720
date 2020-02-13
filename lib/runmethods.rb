@@ -50,7 +50,7 @@ def game_intro
     PROMPT.say(". . . . . . . . . .", color: :red)
     sleep(1)
     puts "\n"
-    PROMPT.say(". . .just kidding, we love feedback! Email notes to gotyouagain@wedontcare.com.", color: :bright_red)
+    PROMPT.say(". . .just kidding, we love feedback! Email notes to gotyouagain@wereallydontcare.com.", color: :bright_red)
     puts "\n" * 2
     sleep 1.2
     y = PROMPT.yes?('Are you ready to start?', help_color: :green, active_color: :green)
@@ -94,14 +94,6 @@ def spell_prompt
     spell
 end
 
-# TODO: Not used until we have multiple enemies
-# def target_prompt(targets)
-#     puts "\n" * 3
-#     PROMPT.say("choose your spell wisely", color: :green)
-#     spell = PROMPT.select("Pick which spell to cast", %w(Manabolt Inspect Frostbolt), active_color: :bright_red, per_page: 6)
-#     spell
-# end
-
 def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
@@ -129,11 +121,11 @@ def cast_spell(player, spell, target)
         PROMPT.ask("(Take a moment to read and press enter to continue when ready...)")
     elsif spell.name == "Heal"
         player.health += spell.damage
-        PROMPT.say("You feel slightly better. You now have #{player.health}")
+        PROMPT.say("You feel slightly better. You now have #{player.health} hp.")
     else
         target.receive_spell(spell)
         if !target.stealth
-            PROMPT.say("The #{target.name} has #{target.health} health left!", color: :blue)
+            PROMPT.say("The #{target.name} has #{target.health} hp left!", color: :blue)
         else
             PROMPT.say("You can't see anything at all. I hope you aren't taking damage!", color: :blue)
         end
@@ -162,14 +154,6 @@ def combat(player, challenge)
             combat_failure(player)
             break;
         end
-
-    #   challenges.each do |challenge|
-    #       challenge_turn(player, challenge)
-    #       if player.health <= 0
-    #           combat_failure(player)
-    #           break;
-    #       end
-    #    end
     end
 end
 
@@ -195,16 +179,15 @@ def challenge_turn(player, challenge)
     puts "\n"
     
     player.take_damage(challenge.strength)
-    if challenge.visible?
-        if challenge.stealth
-            PROMPT.say("Nothing happened. You still feel there's something watching you.", color: :blue)
-        else
-            PROMPT.say("Something attacks you. You take #{challenge.strength} damage. You now have #{player.health} health left. You should figure out what is in here!", color: :blue)
-        end
+
+    if challenge.stealth
+        PROMPT.say("Something attacks you. You should figure out what is in here!", color: :blue)
     else
-        # PROMPT.say("#{attack[:description]}", color: :blue)
-        PROMPT.say("You take #{challenge.strength} damage. You now have #{player.health} health left.", color: :blue)
+        PROMPT.say("#{challenge.name} attacks you.")
     end
+
+    # PROMPT.say("#{attack[:description]}", color: :blue)
+    PROMPT.say("You take #{challenge.strength} damage. You now have #{player.health} hp left.", color: :blue)
     puts "\n"
     player
     sleep(1)
@@ -262,6 +245,7 @@ def enter_location(player)
             puts "\n"
             sleep 1
             PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
+            puts "\n"
             sleep 0.5
         else
             puts "\n"
