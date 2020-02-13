@@ -28,14 +28,14 @@ def game_intro
     PROMPT.say("RUBY WIZARD ", color: :bright_red)
     PROMPT.say("!", color: :green) 
     puts "\n"
-    x = PROMPT.yes?('Is this your first time playing? (type "y" for yes)', help_color: :green, active_color: :green)
+    x = PROMPT.yes?('Is this your first time playing? (Yes here will auto-trigger the tutorial on every level)', help_color: :green, active_color: :green)
     puts "\n" * 2
     if x
         Spellbot.create(first_time: true, current_encounter: 1)
         PROMPT.say("Thanks for giving this a shot! Despite what everyone else says about you, we think you're pretty cool.", color: :green)
     else
         Spellbot.create(first_time: false, current_encounter: 1)
-        PROMPT.say("Who cares! We don't have enough content for that to matter right now!", color: :green)
+        PROMPT.say("You came back! Wonderful! We hate you slightly less now.", color: :green)
     end 
     puts "\n" * 2
     sleep(2)
