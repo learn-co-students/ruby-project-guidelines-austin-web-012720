@@ -32,9 +32,9 @@ class CommandLineInterface < User
         @user = User.find_by(name: name)
 
         if !@user
-            puts "Wrong username, try again."
+            puts "Wrong username, click enter to try again."
             input = PROMPT.ask("Or type c to create account")
-            if input == "c"
+            if input.upcase == "C"
                 create_account
             else 
                 log_in
@@ -46,13 +46,17 @@ class CommandLineInterface < User
 
     def get_password
         input_password = ask("Type in your password:  \n") { |q| q.echo = "*" }
+        
             if @user.password == input_password
                 puts "\n" * 80
                 puts "Welcome #{@user.name}!"
                 choose_action
+            elsif input_password == "q"
+                account?
             else 
                 puts "Wrong password, try again!"
-                get_password
+                puts "Or type q to quit"
+                    get_password
             end 
     end 
 
