@@ -30,9 +30,11 @@ def game_intro
     puts "\n"
     x = PROMPT.yes?('Is this your first time playing? (type "y" for yes)', help_color: :green, active_color: :green)
     puts "\n" * 2
-    if x 
+    if x
+        Spellbot.create(first_time: true, current_encounter: 1)
         PROMPT.say("Thanks for giving this a shot! Despite what everyone else says about you, we think you're pretty cool.", color: :green)
     else
+        Spellbot.create(first_time: false, current_encounter: 1)
         PROMPT.say("Who cares! We don't have enough content for that to matter right now!", color: :green)
     end 
     puts "\n" * 2
@@ -99,29 +101,30 @@ def enter_location(player)
     puts "\n" * 2
     print box
     sleep(3)
-    #PROMPT.say("You have entered #{location.name}. #{location.description}", color: :bright_red)
+
+    if player.first_time
+        tutorial_box(player.current_encounter)
+    end
     puts "\n"
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
     sleep(3)
-    #encounter_challenges.each do |challenge|
-        if !encounter_challenge.stealth
-            puts "\n"
-            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
-            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
-            PROMPT.say("You spotted one!", color: :red)
-            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
-            PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
-            puts "\n"
-            sleep 1
-            PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
-            puts "\n"
-            sleep 0.5
-        else
-            puts "\n"
-            PROMPT.say("You can't see anything...that can't be right, maybe try inspecting?", color: :bright_red)
-            puts "\n"
-        end
-    #end
+    if !encounter_challenge.stealth
+        puts "\n"
+        PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+        PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+        PROMPT.say("You spotted one!", color: :red)
+        PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+        PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
+        puts "\n"
+        sleep 1
+        PROMPT.say("You see a #{encounter_challenge.name}. #{encounter_challenge.description}", color: :bright_red)
+        puts "\n"
+        sleep 0.5
+    else
+        puts "\n"
+        PROMPT.say("You can't see anything...that can't be right, maybe try inspecting?", color: :bright_red)
+        puts "\n"
+    end
 end
 
 def reset_database
@@ -137,8 +140,9 @@ def game_startup
     puts "\n" * 2
     game_intro
     # reset_database
+    player = Spellbot.last
     name = PROMPT.ask("What is your name?")
-    player = Spellbot.new(name: name, current_encounter: 1)
+    player.name = name
     # TODO: change the number of challenges
     while player.current_encounter <= Encounter.last.id
         enter_location(player)
@@ -151,6 +155,7 @@ def game_startup
             break;
         end
         player.current_encounter += 1
+        player.save
     end
 
     player.save

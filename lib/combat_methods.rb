@@ -133,7 +133,6 @@ def combat_failure(player)
 end
 
 
-
 def tutorial_box(encounter_id)
     current_tutorial = Tutorial.find_by(id: encounter_id)
 
