@@ -20,7 +20,7 @@ def cast_spell(player, spell, target)
         player_turn(player, target) # so that the player doesn't lose thier turn for doing the tutorial
     elsif spell.name == "Inspect"
         puts "\n"
-        PROMPT.say("A #{target.name} is revealed!", color: :blue)
+        PROMPT.say("#{target.name} is revealed!", color: :blue)
         target.stealth = false
         puts "\n"
         PROMPT.say("Name=> ", color: :red)

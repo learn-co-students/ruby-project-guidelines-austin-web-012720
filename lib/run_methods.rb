@@ -143,6 +143,7 @@ def game_startup
     player = Spellbot.last
     name = PROMPT.ask("What is your name?")
     player.name = name
+    player.save
     # TODO: change the number of challenges
     while player.current_encounter <= Encounter.last.id
         enter_location(player)
