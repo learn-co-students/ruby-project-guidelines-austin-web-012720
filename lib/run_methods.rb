@@ -19,7 +19,7 @@ def title_logo
     puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
-    sleep 0.5
+    sleep 0.4
 end
 
 def game_intro

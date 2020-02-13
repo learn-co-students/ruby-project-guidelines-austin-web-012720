@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200213151048) do
+ActiveRecord::Schema.define(version: 20200213171303) do
 
   create_table "challenges", force: :cascade do |t|
     t.string  "name"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20200213151048) do
     t.string  "name"
     t.integer "health"
     t.integer "current_encounter"
+    t.integer "max_health"
   end
 
   create_table "spells", force: :cascade do |t|
