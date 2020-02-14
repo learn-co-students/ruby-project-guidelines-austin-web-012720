@@ -3,16 +3,30 @@ RUBY WIZARD
 ## INSTALL INSTRUCTIONS ##
 
 -Clone the directory to your local device. 
+<br>
 -Using a code editing software like VScode or through the terminal open the directory.
+<br>
 -Using the terminal interface type the following commands. Press enter where you see ***.
+<br>
+<br>
 rake db:migrate
+<br>
 ***
+<br>
 rake db:seed
+<br>
 ***
+<br>
+<br>
 -You should see some blocks of text scroll up the terminal when you enter the first command but nothing appear for the second command.
+<br>
 -in the terminal type the following and press enter:
+<br>
 ruby bin/run.rb
+<br>
 -Enjoy the game! If you experience any errors or want to exit press ctrl+c
+<br>
+<br>
 
 
 ## Introduction ##
