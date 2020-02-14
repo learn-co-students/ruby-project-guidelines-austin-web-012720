@@ -223,7 +223,7 @@ class User < ActiveRecord::Base
         
         stocks = Watchlist.all.where("user_id = ?", self.id)
         stocks.each do |stock|
-            puts " - #{stock.symbol}, Message: #{stock.message}"
+            puts " - #{stock.symbol}, Note: #{stock.message}"
         end
     end 
 
