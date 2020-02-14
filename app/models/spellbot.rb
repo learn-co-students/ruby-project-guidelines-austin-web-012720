@@ -41,4 +41,10 @@ class Spellbot < ActiveRecord::Base
         PROMPT.say("You cast #{spell}!", color: :blue)
         cast_spell(spell)
     end
+
+    def reset_stats
+        self.health = 10
+        self.max_health = self.health
+        self.current_encounter = 1
+    end
 end

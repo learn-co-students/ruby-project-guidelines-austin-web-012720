@@ -178,12 +178,21 @@ def show_stored_games
         q.validate(/\d/)
         q.messages[:valid?] = 'Invalid entry. Try again.'
     end
+
+    id.to_i
 end
 
 def load_game
     spellbot_id = show_stored_games
     if spellbot_id != 0
-        spellbot = Spellbot.find_by(id: spellbot_id.to_i)
+        spellbot = Spellbot.find_by(id: spellbot_id)
+        if spellbot.health <= 0
+            yn = PROMPT.yes?("This character wasn't strong enough to make it all the way. What a pity. Should we bring them back to life and start over?")
+            if yn
+                spellbot.reset_stats
+                spellbot.save
+            end
+        end
         game_loop(spellbot)
     end
 end
