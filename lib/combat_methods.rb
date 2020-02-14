@@ -11,7 +11,7 @@ def spell_prompt
 end
 
 def inspect_box(target)
-    inspect_box = TTY::Box.frame(width: 100, align: :left, title: {top_left: "  Inspect  "}, 
+    inspect_box = TTY::Box.frame(width: 100, height: 11, align: :left, title: {top_left: "  Inspect  "}, 
         style: {
             fg: :bright_white,
             bg: :black,
@@ -54,7 +54,7 @@ def cast_spell(player, spell, target)
     elsif spell.name == "Heal"
         player.heal(spell.damage)
         puts "\n"
-        PROMPT.say("You feel slightly better. You now have #{player.health} hp.")
+        PROMPT.say("You feel slightly better. You have regained 3 health and now have #{player.health} hp.")
         puts "\n"
     else
         target.receive_spell(spell)
@@ -120,7 +120,7 @@ def challenge_turn(player, challenge)
     else
         PROMPT.say("#{challenge.name} attacks you.")
     end
-
+    puts "\n"
     # PROMPT.say("#{attack[:description]}", color: :blue)
     PROMPT.say("You take #{challenge.strength} damage. You now have #{player.health} hp left.", color: :blue)
     puts "\n"

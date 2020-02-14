@@ -1,25 +1,25 @@
 def intro_blink
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
-    puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
-    puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("|||>RUBY<|||", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("|>WIZARD <|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
-    sleep 0.4
+    sleep 0.6
     system "clear"
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
-    puts PASTEL.bright_green(FONT.write("|||>RUBY<||", letter_spacing: 2))
-    puts PASTEL.bright_green(FONT.write("|>WIZARD<|", letter_spacing: 2))
+    puts PASTEL.bright_green(FONT.write("|||>RUBY<|||", letter_spacing: 2))
+    puts PASTEL.bright_green(FONT.write("|>WIZARD <|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
-    sleep 0.4
+    sleep 0.6
     system "clear"
 end
 
 def title_logo
-    2.times {intro_blink}
+    3.times {intro_blink}
     puts PASTEL.red(FONT.write("vvvvvvv", letter_spacing: 2))
-    puts PASTEL.bright_red(FONT.write("|||>RUBY<||", letter_spacing: 2))
-    puts PASTEL.bright_red(FONT.write("|>WIZARD<|", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("|||>RUBY<|||", letter_spacing: 2))
+    puts PASTEL.bright_red(FONT.write("|>WIZARD <|", letter_spacing: 2))
     puts PASTEL.red(FONT.write("^^^^^^^^^^^^", letter_spacing: 2))
-    sleep 0.4
+    sleep 1.4
 end
 
 def game_intro
@@ -56,7 +56,7 @@ def game_intro
     y = PROMPT.yes?('Are you ready to start?', help_color: :green, active_color: :green)
     puts "\n" * 2
     if y 
-        PROMPT.say("Ha! That's what *you* think! Let's see if we can humble some of that hubris...", color: :bright_red)
+        PROMPT.say("Ha! That's what *you* think! Let's see how long that hubris holds out...", color: :bright_red)
     else
         PROMPT.say("Doesn't matter, let's go!", color: :bright_red) 
     end   
@@ -67,9 +67,9 @@ end
 
 def end_screen
     PROMPT.say("As you stumble through the clearing ahead, you notice...nothing. Absolutely nothing for you to fight or do.", color: :bright_red)
-    PROMPT.ask("Did...did you win? Press enter to find out...")
+    PROMPT.ask("Did...did you win? Press enter...")
     PROMPT.say("You did!!", color: :bright_red)
-    PROMPT.ask("Press enter to win!")
+    PROMPT.ask("Congratulations!!")
     puts PASTEL.red(FONT.write(". . . . . . . . . . .", letter_spacing: 3))
     puts PASTEL.bright_red(FONT.write(" YOU   HAVE", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("CONQUERED", letter_spacing: 2))
@@ -80,6 +80,7 @@ end
 def end_screen_failure
     puts PASTEL.bright_red(FONT.write("    GAME", letter_spacing: 2))
     puts PASTEL.bright_red(FONT.write("    OVER", letter_spacing: 2))
+    PROMPT.ask("Press enter to end the game. Maybe next time you won't be so terrible at it!", color: :bright_red)
 end
 
 def enter_location(player)
@@ -105,7 +106,7 @@ def enter_location(player)
     end
     puts "\n"
     PROMPT.say("Checking to see if there are enemies nearby...", color: :green)
-    sleep(3)
+    sleep(2)
     if !encounter_challenge.stealth
         puts "\n"
         PROMPT.say("~~~~~~~~~~~~~~~~~", color: :green)
@@ -125,14 +126,6 @@ def enter_location(player)
     end
 end
 
-def reset_database
-    Challenge.delete_all
-    Encounter.delete_all
-    Location.delete_all
-    Spell.delete_all
-    Spellbot.delete_all
-end
-
 def game_loop(player)
     while player.current_encounter <= Encounter.last.id
         enter_location(player)
@@ -145,6 +138,10 @@ def game_loop(player)
             break;
         end
         player.current_encounter += 1
+        if player.current_encounter > Encounter.count
+            player.current_encounter = 1
+            break;
+        end
         player.save
     end
 
