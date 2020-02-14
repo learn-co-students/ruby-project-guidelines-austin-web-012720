@@ -154,6 +154,7 @@ def game_loop(player)
     else
         end_screen
     end
+    PROMPT.ask("Enter to return to main menu")
 end
 
 def new_game
