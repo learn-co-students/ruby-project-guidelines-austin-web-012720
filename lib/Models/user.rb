@@ -220,14 +220,7 @@ class User < ActiveRecord::Base
         puts "\n" * 80
         puts "WATCHLIST\n"
         puts "\n" 
-        # if self.watchlists.size == 0
-        #     puts "Watchlist empty."
-        # else 
-        #     self.watchlists.each do |stock|
-        #         puts " - #{stock.symbol}"
-        #     end
-    
-        # end 
+        
         stocks = Watchlist.all.where("user_id = ?", self.id)
         stocks.each do |stock|
             puts " - #{stock.symbol}"
