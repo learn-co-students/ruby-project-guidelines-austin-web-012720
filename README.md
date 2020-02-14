@@ -6,16 +6,16 @@ RUBY WIZARD
 <br>
 -Using a code editing software like VScode or through the terminal open the directory.
 <br>
--Using the terminal interface type the following commands. Press enter where you see ***.
+-Using the terminal interface type the following commands. Press enter where you see (enter).
 <br>
 <br>
 rake db:migrate
 <br>
-***
+(enter)
 <br>
 rake db:seed
 <br>
-***
+(enter)
 <br>
 <br>
 -You should see some blocks of text scroll up the terminal when you enter the first command but nothing appear for the second command.
