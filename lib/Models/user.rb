@@ -223,17 +223,21 @@ class User < ActiveRecord::Base
         
         stocks = Watchlist.all.where("user_id = ?", self.id)
         stocks.each do |stock|
-            puts " - #{stock.symbol}"
+            puts " - #{stock.symbol}, Message: #{stock.message}"
         end
     end 
 
-    def add_stock_watchlist(symbol)
+    def add_stock_watchlist(symbol, message)
         stock = Watchlist.find_or_create_by(symbol: symbol, user_id: self.id)
+        stock.update(message: message)
+        
     end 
 
     def remove_stock_watchlist(symbol)
         stock = Watchlist.find_by(symbol: symbol, user_id: self.id)
         stock.destroy
     end 
+
+    
 
 end 

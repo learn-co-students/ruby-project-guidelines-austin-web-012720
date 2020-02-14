@@ -168,8 +168,9 @@ class CommandLineInterface < User
         input = PROMPT.select("Please choose an uption", choices)
         case input 
             when "Add_Stock"
-                symbol =PROMPT.ask("Type in a symbol")
-                @user.add_stock_watchlist(symbol.upcase)
+                symbol = PROMPT.ask("Type in a symbol")
+                message = PROMPT.ask("Type a message")
+                @user.add_stock_watchlist(symbol.upcase, message)
             when "Remove_Stock"
                 symbol = PROMPT.ask("Type in a symbol")
                 @user.remove_stock_watchlist(symbol.upcase)
