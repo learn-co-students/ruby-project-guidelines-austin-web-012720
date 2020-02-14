@@ -164,6 +164,7 @@ class CommandLineInterface < User
 
     def watchlist_menu
         choices = %w(Add_Stock Remove_Stock Portfolio_Menu)
+        puts "\n"
         input = PROMPT.select("Please choose an uption", choices)
         case input 
             when "Add_Stock"
@@ -171,12 +172,11 @@ class CommandLineInterface < User
                 @user.add_stock_watchlist(symbol.upcase)
             when "Remove_Stock"
                 symbol = PROMPT.ask("Type in a symbol")
-                @user.add_stock_watchlist(symbol.upcase)
+                @user.remove_stock_watchlist(symbol.upcase)
             when "Portfolio_Menu"
                 portfolio_menu
         end 
-        watchlist_stocks
-        watchlist_menu
+        @user.get_symbols_portfolio
     end 
         
     
