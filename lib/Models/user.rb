@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base 
     has_many :portfolios
     has_many :stocks, through: :portfolios
+    has_many :watchlists
 
     def get_stock_ids_user
         user_id = self.id 
@@ -213,6 +214,31 @@ class User < ActiveRecord::Base
         self.stocks.max_by do |stock|
             stock.price
         end 
+    end 
+
+    def watchlist_stocks
+        puts "\n" * 80
+        puts "WATCHLIST\n"
+        if self.watchlists == []
+            puts "Watchlist empty."
+        else 
+            self.watchlists do |stock|
+                puts "#{stock.symbol}"
+            end
+    
+        end 
+        
+            
+    end 
+
+    def add_stock_watchlist(symbol)
+        stock = Watchlist.find_or_create_by(symbol: symbol, user_id: self.id)
+
+    end 
+
+    def remove_stock_watchlist(symbol)
+        stock = Watchlist.find_by(symbol: symbol, user_id: self.id)
+        stock.destroy
     end 
 
 end 
