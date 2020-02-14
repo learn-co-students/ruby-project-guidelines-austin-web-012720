@@ -174,9 +174,11 @@ class CommandLineInterface < User
                 symbol = PROMPT.ask("Type in a symbol")
                 @user.remove_stock_watchlist(symbol.upcase)
             when "Portfolio_Menu"
+                @user.get_symbols_portfolio
                 portfolio_menu
         end 
-        @user.get_symbols_portfolio
+        @user.watchlist_stocks
+        watchlist_menu
     end 
         
     
