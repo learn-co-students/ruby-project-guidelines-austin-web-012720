@@ -35,20 +35,20 @@ def cast_spell(player, spell, target)
     # will modify based on attributes later
     # boost spell damage based on player attributes, etc.
     puts "\n"
-    PROMPT.say("You cast #{spell.name}!", color: :blue)
+    PROMPT.say("You cast #{spell.name}!", color: :cyan)
     if spell.name == "Tutorial"
         puts "\n"
         tutorial_box(player.current_encounter)
         player_turn(player, target) # so that the player doesn't lose thier turn for doing the tutorial
     elsif spell.name == "Inspect"
         puts "\n"
-        PROMPT.say("#{target.name} is revealed!", color: :blue)
+        PROMPT.say("#{target.name} is revealed!", color: :cyan)
         target.stealth = false
         puts "\n"
         inspect_box(target)
         puts "\n"
         puts "\n"
-        PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :blue)
+        PROMPT.say("Look at all that information! See if your enemy has armor or an element, it could change your spell choice!", color: :cyan)
         puts "\n"
         PROMPT.ask("Mash your keyboard impatiently to get back to combat. Oh, you probably were already doing that.")
     elsif spell.name == "Heal"
@@ -60,9 +60,9 @@ def cast_spell(player, spell, target)
         target.receive_spell(spell)
         puts "\n"
         if !target.stealth
-            PROMPT.say("The #{target.name} has #{target.health} hp left!", color: :blue)
+            PROMPT.say("The #{target.name} has #{target.health} hp left!", color: :cyan)
         else
-            PROMPT.say("You can't see anything at all. I hope you aren't taking damage!", color: :blue)
+            PROMPT.say("You can't see anything at all. I hope you aren't taking damage!", color: :cyan)
         end
     end
 end
@@ -116,13 +116,13 @@ def challenge_turn(player, challenge)
     player.take_damage(challenge.strength)
 
     if challenge.stealth
-        PROMPT.say("Something attacks you. You should figure out what is in here!", color: :blue)
+        PROMPT.say("Something attacks you. You should figure out what is in here!", color: :cyan)
     else
         PROMPT.say("#{challenge.name} attacks you.")
     end
     puts "\n"
-    # PROMPT.say("#{attack[:description]}", color: :blue)
-    PROMPT.say("You take #{challenge.strength} damage. You now have #{player.health} hp left.", color: :blue)
+    # PROMPT.say("#{attack[:description]}", color: :cyan)
+    PROMPT.say("You take #{challenge.strength} damage. You now have #{player.health} hp left.", color: :cyan)
     puts "\n"
     player
     sleep(1)
